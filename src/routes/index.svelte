@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { dev } from "$app/env";
     import { onMount } from "svelte";
     import { allCards } from '$lib/store/utils';
     import Translation from '$lib/components/Translation.svelte';
@@ -32,7 +33,7 @@
         if ($allCards.length == 0)
         {
             console.log('Fetching cards...');
-            fetch('http://localhost:3000/cards')
+            fetch(`${dev ? 'http://localhost:3000' : ''}/api/cards`)
             .then(res => res.json())
             .then(data => {
                 allCards.set(data);
@@ -54,13 +55,17 @@
 		<li><Translation id="home" /></li>
 	</ul>
 </div>
+<div>
+    <Translation id="description"/>
+    <a class="text-primary hover:underline" href="https://rules.art/" target="_blank">Rules</a>
+</div>
 {#if loading}
     <div class="radial-progress animate-spin text-primary" style="--value:70;"></div>
-    <h1>This loading will only happen once to load all data.</h1>
+    <h1><Translation id="loading"/></h1>
 {:else}
     <div class="form-control w-full">
         <label class="label">
-            <span class="label-text">Search</span>
+            <span class="label-text"><Translation id="search"/></span>
             <input class="hidden"/>
         </label>
         <input

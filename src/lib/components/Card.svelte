@@ -1,6 +1,6 @@
 <script lang="ts">
-import { goto } from "$app/navigation";
-
+    import { goto } from "$app/navigation";
+    import Translation from "./Translation.svelte";
 
     export let name: string;
     export let pictureUrl: string;
@@ -18,20 +18,20 @@ import { goto } from "$app/navigation";
         <h2 class="card-title">
             {name}
             {#if isCommon}
-                <div class="badge badge-primary">Common</div>
+                <div class="badge badge-primary"><Translation id="common"/></div>
             {:else}
-                <div class="badge bg-slate-400 text-black">Platinum</div>
+                <div class="badge bg-slate-400 text-black"><Translation id="platinum"/></div>
             {/if}
         </h2>
         <div>Saison {season}
             {#if isCommon}
-                <p>Last obtained number: #{cardsMintedCount}</p>
+                <p><Translation id="last_obtained"/>: #{cardsMintedCount}</p>
             {:else}
-                <p>{cardsMintedCount} cards obtained yet !</p>
+                <p>{cardsMintedCount} <Translation id="already_obtained"/>!</p>
             {/if}
         </div>
         <div class="card-actions justify-end">
-            <button class="btn btn-primary" on:click={() => goto(`/${slug}`)}>View</button>
+            <button class="btn btn-primary" on:click={() => goto(`/${slug}`)}><Translation id="view"/></button>
         </div>
     </div>
 </div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { dev } from "$app/env";
     import { page } from '$app/stores';
     import { onMount } from 'svelte';
     import Translation from '$lib/components/Translation.svelte';
@@ -39,12 +40,12 @@
                 // Check if query is a valid number
                 if(parseInt(query) > 0 && parseInt(query) <= cardCount){
                     validQuery = true;
-                    fetch(`http://localhost:3000/card/${cardId}/${query}`)
+                    fetch(`${dev ? 'http://localhost:3000' : ''}/api/card/${cardId}/${query}`)
                     .then(res => res.json())
                     .then(data => {
                         dataQuery = data;
                         error = false;
-                        fetch(`http://localhost:3000/user/${dataQuery.owner.user.slug}`)
+                        fetch(`${dev ? 'http://localhost:3000' : ''}/api/user/${dataQuery.owner.user.slug}`)
                         .then(res => res.json())
                         .then(data => {
                             userQuery = data.profile;
@@ -84,7 +85,7 @@
         if ($allCards.length == 0)
         {
             console.log('Fetching cards...');
-            fetch('http://localhost:3000/cards')
+            fetch(`${dev ? 'http://localhost:3000' : ''}/api/cards`)
             .then(res => res.json())
             .then(data => {
                 allCards.set(data);
@@ -108,14 +109,19 @@
 <div class="card card-side bg-base-100 shadow-xl w-full">
     {#if loading}
         <div class="radial-progress animate-spin text-primary" style="--value:70;"></div>
-        <h1>This loading will only happen once to load all data.</h1>
+        <h1><Translation id="loading"/></h1>
     {:else}
         <figure><img src={pictureUrl} class="h-80" alt="Movie"></figure>
         <div class="card-body">
             <h2 class="card-title">{artistName} {validQuery ? `#${query}` : ''}</h2>
             <div class="form-control w-full">
                 <label class="label">
-                    <span class="label-text">Search {cardCount !== 0 ? `(${cardCount} cards obtained)` : ''}</span>
+                    <span class="label-text">
+                        <Translation id="search"/> 
+                        {#if cardCount !== 0}
+                            <span class="text-sm">({cardCount} <Translation id="cards_obtained"/>)</span>
+                        {/if}
+                    </span>
                     <input class="hidden"/>
                 </label>
                 <div class="tooltip tooltip-bottom " class:tooltip-open={!validQuery && query !== ''}  data-tip="Accept only number">
@@ -133,15 +139,15 @@
                 <div class="card-actions justify-end">
                     <div class="form-control w-full">
                         <label class="label">
-                            <span class="label-text">Result</span>
+                            <span class="label-text"><Translation id="result"/></span>
                             <input class="hidden"/>
                         </label>
                         <div class="p-3 bg-base-100 shadow-xl w-full rounded border border-primary">
                             {#if error}
-                                <div class="text-error">Error, card might not have an owner</div>
+                                <div class="text-error"><Translation id="error"/></div>
                             {:else}
                                 {#if dataQuery.owner}
-                                    <p>{dataQuery.owner.user.username} since {new Date(dataQuery.ownerSince).toLocaleString('FR')}</p>
+                                    <p>{dataQuery.owner.user.username} <Translation id="since"/> {new Date(dataQuery.ownerSince).toLocaleString('FR')}</p>
                                     <div>
                                         <i class="fa-brands fa-discord"></i>
                                         {#if userQuery.discordUser}
@@ -152,7 +158,7 @@
                                             }}>{userQuery.discordUser.username} #{userQuery.discordUser.discriminator}</p>
                                         </div>
                                         {:else}
-                                            <p class="text-error inline">Not available</p>
+                                            <p class="text-error inline"><Translation id="not_available"/></p>
                                         {/if}
                                     </div>
                                 {/if}
