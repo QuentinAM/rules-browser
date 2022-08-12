@@ -7,7 +7,10 @@
     import { allCards } from '$lib/store/utils';
 
     const cardId = $page.params.cardId;
+    const search = $page.params.search;
+    let customSearch: boolean = false;
     let artistName : string = '';
+    let isCommon: boolean;
     let loading: boolean = true;
 
     let query: string = '';
@@ -25,6 +28,42 @@
         userQuery = {};
     }
 
+    function UpdateHistory(query: string){
+        // Get history
+        let array: any[] = JSON.parse(localStorage.getItem('history') || '[]');
+    
+        if (customSearch){
+            // Move `/${cardId}/${query}` at the top of the history
+            const index = array.findIndex(item => item.link === `/${cardId}/${query}`);
+            if (index !== -1){
+                array.splice(index, 1);
+                array.unshift({
+                    name: `${artistName} #${query}`,
+                    link: `/${cardId}/${query}`
+                });
+            }
+            customSearch = false;
+            return;
+        }
+
+        if (array.find(h => h.link === `/${cardId}/${query}`)){
+            return;
+        }
+
+        // If array length is equal to 5 remove the first element
+        if (array.length >= 5){
+            array.shift();
+        }
+
+        array.push({
+            name: `${artistName} #${query} ${isCommon ? 'Commune' : 'Platine'}`,
+            link: `/${cardId}/${query}`
+        });
+
+        // Save history
+        localStorage.setItem('history', JSON.stringify(array));
+    }
+
     function OnInputChange(){
         clipboardCopied = false;
         if (query === '')
@@ -40,6 +79,7 @@
                 // Check if query is a valid number
                 if(parseInt(query) > 0 && parseInt(query) <= cardCount){
                     validQuery = true;
+                    UpdateHistory(query);
                     fetch(`${dev ? 'http://localhost:3000' : ''}/api/card/${cardId}/${query}`)
                     .then(res => res.json())
                     .then(data => {
@@ -74,9 +114,31 @@
 
     function Setup(){
         const card = $allCards.find(card => card.slug === cardId);
+        isCommon = cardId.includes('common');
         cardCount = card.cardsMintedCount;
         pictureUrl = card.pictureUrl;
         artistName = card.artist.displayName;
+        
+        // Check if search is a number
+
+        if (search == 'search')
+        {
+            loading = false;
+            return;
+        }
+
+        if(!isNaN(parseInt(search))){
+            // Check if search is a valid number
+            if(parseInt(search) > 0 && parseInt(search) <= cardCount){
+                customSearch = true;
+                query = search;
+                OnInputChange();
+            }
+        }
+        else{
+            goto(`/${cardId}/search`);
+        }
+        
         loading = false;
     }
 
@@ -97,6 +159,7 @@
             console.log('Cards already fetched.');
             Setup();
         }
+        
     })
 </script>
 
@@ -113,7 +176,14 @@
     {:else}
         <figure><img src={pictureUrl} class="lg:h-96 h-56" alt="Movie"></figure>
         <div class="card-body">
-            <h2 class="card-title">{artistName} {validQuery ? `#${query}` : ''}</h2>
+            <h2 class="card-title">
+                {artistName} {validQuery ? `#${query}` : ''}
+                {#if isCommon}
+                    <div class="badge badge-primary"><Translation id="common"/></div>
+                {:else}
+                    <div class="badge bg-slate-400 text-black"><Translation id="platinum"/></div>
+                {/if}
+            </h2>
             <div class="form-control w-full">
                 <label class="label">
                     <span class="label-text">

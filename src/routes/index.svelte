@@ -4,10 +4,12 @@
     import { allCards } from '$lib/store/utils';
     import Translation from '$lib/components/Translation.svelte';
     import Card from '$lib/components/Card.svelte';
+    import { goto } from "$app/navigation";
 
     let loading: boolean = true;
     let query: string = '';
     let shownCards: any[] = [];
+    let history: any[] = [];
 
     function onQuery(){
         if (query === '')
@@ -47,6 +49,7 @@
             loading = false;
             shownCards = $allCards;
         }
+        history = JSON.parse(localStorage.getItem('history') || '[]');
     })
 </script>
 
@@ -68,13 +71,23 @@
             <span class="label-text"><Translation id="search"/></span>
             <input class="hidden"/>
         </label>
-        <input
-            bind:value={query}
-            on:input={onQuery}
-            placeholder="..."
-            type="text"
-            class="input input-primary w-full"
-        />
+        <div class="form-control">
+            <div class="input-group">
+                <input
+                    bind:value={query}
+                    on:input={onQuery}
+                    placeholder="..."
+                    type="text"
+                    class="input input-primary w-full"
+                />
+                <select class="select select-primary">
+                    <option disabled selected>Historique</option>
+                    {#each history.reverse() as h}
+                        <option on:click={() => goto(`${h.link}`)}>{h.name}</option>
+                    {/each}
+                </select>
+            </div>
+        </div>
     </div>
     {#each shownCards as card}
         <Card

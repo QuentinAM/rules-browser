@@ -13,7 +13,7 @@
 </script>
 
 <div class="card card-side bg-base-100 shadow-xl w-full">
-    <figure><img src={pictureUrl} class="h-52" alt="Movie"></figure>
+    <figure><img src={pictureUrl} class="lg:h-52 h-40" alt="Movie"></figure>
     <div class="card-body">
         <h2 class="card-title">
             {name}
@@ -31,7 +31,7 @@
             {/if}
         </div>
         <div class="card-actions justify-end">
-            <button class="btn btn-primary" on:click={() => goto(`/${slug}`)}><Translation id="view"/></button>
+            <button class="btn btn-primary" on:click={() => goto(`/${slug}/search`)}><Translation id="view"/></button>
         </div>
     </div>
 </div>
