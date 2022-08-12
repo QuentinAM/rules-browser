@@ -11,6 +11,9 @@
     let shownCards: any[] = [];
     let history: any[] = [];
 
+    let commonCheck: boolean = true;
+    let platinumCheck: boolean = true;
+
     function onQuery(){
         if (query === '')
         {
@@ -20,6 +23,26 @@
         console.log(query);
         shownCards = $allCards.filter(card => Format(card.artist.displayName).includes(Format(query)));
     }
+
+    function OnCheck(){
+        if (commonCheck && platinumCheck)
+        {
+            shownCards = $allCards;
+        }
+        else if (commonCheck && !platinumCheck)
+        {
+            shownCards = $allCards.filter(card => card.slug.includes('common'));
+        }
+        else if (!commonCheck && platinumCheck)
+        {
+            shownCards = $allCards.filter(card => card.slug.includes('platinium'));
+        }
+        else
+        {
+            shownCards = [];
+        }
+    }
+    $: commonCheck, platinumCheck, OnCheck();
 
     function Format(str: string){
         // Remove spaces
@@ -61,6 +84,7 @@
 <div>
     <Translation id="description"/>
     <a class="text-primary hover:underline" href="https://rules.art/" target="_blank">Rules</a>
+    (s/o <a class="text-primary hover:underline" href="https://github.com/0xChqrles" target="_blank">Chqrles</a>)
 </div>
 {#if loading}
     <div class="radial-progress animate-spin text-primary" style="--value:70;"></div>
@@ -87,6 +111,20 @@
                     {/each}
                 </select>
             </div>
+        </div>
+    </div>
+    <div class="flex flex-row space-x-2 w-full">
+        <div class="form-control space-x-2" >
+            <label class="label cursor-pointer">
+            <span class="label-text"><Translation id="common"/>&nbsp;</span> 
+                <input type="checkbox" bind:checked={commonCheck} class="checkbox checkbox-primary" />
+            </label>
+        </div>
+        <div class="form-control space-x-2 ">
+            <label class="label cursor-pointer">
+            <span class="label-text"><Translation id="platinum"/>&nbsp;</span> 
+            <input type="checkbox" bind:checked={platinumCheck} class="checkbox" />
+            </label>
         </div>
     </div>
     {#each shownCards as card}
