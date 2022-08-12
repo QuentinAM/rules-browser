@@ -5,6 +5,7 @@
     import Translation from '$lib/components/Translation.svelte';
     import { goto } from '$app/navigation';
     import { allCards } from '$lib/store/utils';
+    import Favicon from "$lib/assets/favicon.png"
 
     const cardId = $page.params.cardId;
     const search = $page.params.search;
@@ -217,7 +218,10 @@
                                 <div class="text-error"><Translation id="error"/></div>
                             {:else}
                                 {#if dataQuery.owner}
-                                    <p>{dataQuery.owner.user.username} <Translation id="since"/> {new Date(dataQuery.ownerSince).toLocaleString('FR')}</p>
+                                    <p>
+                                        <img class="h-5 inline" src={Favicon} alt=""/>
+                                        {dataQuery.owner.user.username} <Translation id="since"/> {new Date(dataQuery.ownerSince).toLocaleString('FR')}
+                                    </p>
                                     <div>
                                         <i class="fa-brands fa-discord"></i>
                                         {#if userQuery.discordUser}
