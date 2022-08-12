@@ -111,7 +111,7 @@
         <div class="radial-progress animate-spin text-primary" style="--value:70;"></div>
         <h1><Translation id="loading"/></h1>
     {:else}
-        <figure><img src={pictureUrl} class="h-80" alt="Movie"></figure>
+        <figure><img src={pictureUrl} class="lg:h-96 h-56" alt="Movie"></figure>
         <div class="card-body">
             <h2 class="card-title">{artistName} {validQuery ? `#${query}` : ''}</h2>
             <div class="form-control w-full">
@@ -154,7 +154,7 @@
                                         <div class="tooltip tooltip-bottom" class:tooltip-success={clipboardCopied} data-tip={clipboardCopied ? 'Copied !' : "Copy"}>
                                             <p class="font-semibold inline hover:underline cursor-pointer" on:click={() => {
                                                 clipboardCopied = true;
-                                                navigator.clipboard.writeText(`${userQuery.discordUser.username} #${userQuery.discordUser.discriminator}`)
+                                                navigator.clipboard.writeText(`${userQuery.discordUser.username}#${userQuery.discordUser.discriminator}`)
                                             }}>{userQuery.discordUser.username} #{userQuery.discordUser.discriminator}</p>
                                         </div>
                                         {:else}
@@ -166,6 +166,9 @@
                         </div>
                     </div>
                 </div>
+            {/if}
+            {#if validQuery}
+                <a href={`https://rules.art/card/${cardId}/${query}`} target="_blank" class="btn btn-primary w-full">Voir la carte sur Rules</a>
             {/if}
         </div>
     {/if}
