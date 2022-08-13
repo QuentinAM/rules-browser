@@ -3,6 +3,7 @@ import cors from 'cors';
 import GetAllCardModels from './routes/cards.mjs';
 import GetCardById from './routes/card.mjs';
 import User from './routes/user.mjs';
+import GetCardByRange from './routes/card_range.mjs';
 import { handler } from '../build/handler.js';
 
 const app = express();
@@ -21,6 +22,12 @@ app.get('/api/user/:slug', async (req, res) => {
     const slug = req.params.slug;
     const user = await User(slug);
     res.send(user);
+});
+app.get('/api/card_range/:card/:start', async (req, res) => {
+    const card = req.params.card;
+    const start = req.params.start;
+    const cardByRange = await GetCardByRange(card, start);
+    res.send(cardByRange);
 });
 app.use(handler);
 app.listen(3000, () => console.log('Listening on port 3000!'));

@@ -5,20 +5,25 @@
     import Translation from '$lib/components/Translation.svelte';
     import { goto } from '$app/navigation';
     import { allCards } from '$lib/store/utils';
-    import Favicon from "$lib/assets/favicon.png"
+    import Favicon from "$lib/assets/favicon.png";
+    import viewport from "$lib/viewport";
 
     const cardId = $page.params.cardId;
     const search = $page.params.search;
+    let startIndex: number = 1;
     let customSearch: boolean = false;
     let artistName : string = '';
     let isCommon: boolean;
     let loading: boolean = true;
+    let fetchingCards: boolean = true;
 
     let query: string = '';
     let validQuery: boolean = false;
     let dataQuery: any = {};
     let userQuery: any = {};
     let cardCount: number = 0;
+    let allRulesCards: any[] = [];
+    let hideNoDataCards: boolean = false;
 
     let pictureUrl: string = '';
     let clipboardCopied: boolean = false;
@@ -143,6 +148,21 @@
         loading = false;
     }
 
+    function FetchNextRulesCards(){
+        fetchingCards = true;
+        console.log(`Fetching ${cardId} from ${startIndex} to ${startIndex + 10}`);
+        fetch(`${dev ? 'http://localhost:3000' : ''}/api/card_range/${cardId}/${startIndex}`)
+        .then(res => res.json())
+        .then(data => {
+            allRulesCards = [...allRulesCards, ...data];
+            startIndex += 10;
+            fetchingCards = false;
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    }
+
     onMount(() => {
 
         if ($allCards.length == 0)
@@ -160,7 +180,18 @@
             console.log('Cards already fetched.');
             Setup();
         }
-        
+
+        console.log(`Fetching ${cardId} from ${startIndex} to ${startIndex + 10}`);
+        fetch(`${dev ? 'http://localhost:3000' : ''}/api/card_range/${cardId}/${startIndex}`)
+        .then(res => res.json())
+        .then(data => {
+            allRulesCards = data;
+            startIndex += 10;
+            fetchingCards = false;
+        })
+        .catch(err => {
+            console.log(err);
+        });
     })
 </script>
 
@@ -246,4 +277,105 @@
             {/if}
         </div>
     {/if}
+</div>
+
+<div class="form-control w-full">
+    <label class="label cursor-pointer">
+        <span class="label-text">Maquer les cartes sans donnée</span> 
+        <input type="checkbox" bind:checked={hideNoDataCards} class="checkbox" />
+    </label>
+</div>
+<div class="w-full">
+    <table class="table w-full">
+      <!-- head -->
+      <thead>
+        <tr>
+          <th>Collectionneur</th>
+          <th>Carte</th>
+          <th>Depuis</th>
+          <th>Discord <i class="fa-brands fa-discord"></i></th>
+        </tr>
+      </thead>
+      <tbody>
+        {#each allRulesCards as card, index}
+            {#if (!card && !hideNoDataCards) || index === allRulesCards.length - 1}
+                <tr>
+                    <td class="text-error">Pas de donnée</td>
+                    <th>
+                        {#if index === allRulesCards.length - 1}
+                            <h1 use:viewport
+                            on:enterViewport={() => FetchNextRulesCards()}
+                            on:exitViewport={() => {}}>{artistName} #{index + 1}</h1>
+                        {:else}
+                            {artistName} #{index + 1}
+                        {/if}
+                        {#if isCommon}
+                            <div class="badge badge-primary"><Translation id="common"/></div>
+                        {:else}
+                            <div class="badge bg-slate-400 text-black"><Translation id="platinum"/></div>
+                        {/if}
+                    </th>
+                    <td></td>
+                    <th></th>
+                </tr>
+            {:else if card}
+                <tr>
+                    <td>
+                    <div class="flex items-center space-x-3">
+                        <div class="avatar">
+                            <div class="mask mask-squircle w-12 h-12">
+                                <img src={card.owner.user.profile.pictureUrl} alt="avatar" />
+                            </div>
+                        </div>
+                        <div>
+                            <div class="tooltip tooltip-bottom link-hover" data-tip="Profile Rules">
+                                <a class="font-bold flex" href={`https://rules.art/user/${card.owner.user.slug}`} target="_blank">
+                                    {card.owner.user.username} &nbsp;
+                                    {#if card.owner.user.profile.certified}
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" width="18px"><path d="m17.326 10.216-.005.002a1.433 1.433 0 0 0-.506 1.89l.001.001a1.433 1.433 0 0 1-1.217 2.106 1.433 1.433 0 0 0-1.384 1.385 1.433 1.433 0 0 1-2.106 1.216h-.002a1.433 1.433 0 0 0-1.889.506l-.003.004a1.433 1.433 0 0 1-2.43 0l-.004-.005a1.433 1.433 0 0 0-1.889-.506l-.002.001A1.433 1.433 0 0 1 3.785 15.6 1.433 1.433 0 0 0 2.4 14.215a1.433 1.433 0 0 1-1.217-2.106l.001-.002a1.433 1.433 0 0 0-.506-1.889l-.004-.002a1.433 1.433 0 0 1 0-2.432l.005-.002a1.433 1.433 0 0 0 .506-1.89l-.001-.001A1.433 1.433 0 0 1 2.4 3.785 1.433 1.433 0 0 0 3.785 2.4a1.433 1.433 0 0 1 2.106-1.216h.002A1.433 1.433 0 0 0 7.782.678l.002-.004a1.433 1.433 0 0 1 2.432 0l.002.005a1.433 1.433 0 0 0 1.89.506l.001-.001A1.433 1.433 0 0 1 14.215 2.4 1.433 1.433 0 0 0 15.6 3.785a1.433 1.433 0 0 1 1.216 2.106v.002a1.433 1.433 0 0 0 .506 1.889l.004.003a1.433 1.433 0 0 1 0 2.43Z" fill="#9F04DC"></path><path fill="#fff" d="m13.18 7.15-3.66 3.74-1.61 1.6-1.58-1.64-1.51-1.57 1.61-1.61 1.51 1.54 3.67-3.7 1.57 1.64z"></path></svg>
+                                    {/if}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    </td>
+                    <th>
+                        {#if index === allRulesCards.length - 1}
+                            <h1 use:viewport
+                                on:enterViewport={() => FetchNextRulesCards()}
+                                on:exitViewport={() => {}}
+                            >
+                                {artistName} #{index + 1}
+                            </h1>
+                        {:else}
+                            {artistName} #{index + 1}
+                        {/if}
+                        {#if isCommon}
+                            <div class="badge badge-primary"><Translation id="common"/></div>
+                        {:else}
+                            <div class="badge bg-slate-400 text-black"><Translation id="platinum"/></div>
+                        {/if}
+                    </th>
+                    <td>{new Date(card.ownerSince).toLocaleString('FR')}</td>
+                    <th>
+                        {#if card.owner.user.profile.discordUser}
+                            <div class="tooltip tooltip-bottom" class:tooltip-success={clipboardCopied} data-tip={clipboardCopied ? 'Copied !' : "Copy"}>
+                                <p class="font-semibold inline hover:underline cursor-pointer" on:click={() => {
+                                    clipboardCopied = true;
+                                    navigator.clipboard.writeText(`${card.owner.user.profile.discordUser.username}#${card.owner.user.profile.discordUser.discriminator}`)
+                                }}>{card.owner.user.profile.discordUser.username} #{card.owner.user.profile.discordUser.discriminator}</p>
+                            </div>
+                        {/if}
+                    </th>
+                </tr>
+            {/if}
+        {/each}
+        {#if fetchingCards}
+            <div class="flex flex-col items-center justify-center">
+                <div class="radial-progress animate-spin text-primary" style="--value:70;"></div>
+                <h1>Chargement des cartes de {startIndex} à {startIndex + 10}</h1>
+            </div>
+        {/if}
+      </tbody>
+    </table>
 </div>
