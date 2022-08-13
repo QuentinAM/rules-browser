@@ -18,24 +18,41 @@
         if (query === '')
         {
             shownCards = $allCards;
+            OnCheck();
             return;
         }
         console.log(query);
-        shownCards = $allCards.filter(card => Format(card.artist.displayName).includes(Format(query)));
+        shownCards = $allCards.filter(card => {
+            if (commonCheck && platinumCheck)
+            {
+                return Format(card.artist.displayName).includes(Format(query));
+            }
+            else if (commonCheck && !platinumCheck)
+            {
+                return Format(card.artist.displayName).includes(Format(query)) && card.slug.includes('common');
+            }
+            else if (!commonCheck && platinumCheck)
+            {
+                return Format(card.artist.displayName).includes(Format(query)) && card.slug.includes('platinium');
+            }
+            return false;
+        });
     }
 
     function OnCheck(){
         if (commonCheck && platinumCheck)
         {
-            shownCards = $allCards;
+            shownCards = $allCards.filter(card => {
+                return Format(card.artist.displayName).includes(Format(query));
+            });
         }
         else if (commonCheck && !platinumCheck)
         {
-            shownCards = $allCards.filter(card => card.slug.includes('common'));
+            shownCards = $allCards.filter(card => card.slug.includes('common') && Format(card.artist.displayName).includes(Format(query)));
         }
         else if (!commonCheck && platinumCheck)
         {
-            shownCards = $allCards.filter(card => card.slug.includes('platinium'));
+            shownCards = $allCards.filter(card => card.slug.includes('platinium') && Format(card.artist.displayName).includes(Format(query)));
         }
         else
         {
