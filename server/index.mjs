@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import GetAllCardModels from './routes/cards.mjs';
 import GetCardById from './routes/card.mjs';
+import GetCardByIdInfos from './routes/card_infos.mjs';
 import User from './routes/user.mjs';
 import GetCardByRange from './routes/card_range.mjs';
 import { handler } from '../build/handler.js';
@@ -18,6 +19,12 @@ app.get('/api/card/:card/:id', async (req, res) => {
     const cardById = await GetCardById(card, id);
     res.send(cardById);
 });
+app.get('/api/card_infos/:card/:id', async (req, res) => {
+    const card = req.params.card;
+    const id = req.params.id;
+    const cardInfos = await GetCardByIdInfos(card, id);
+    res.send(cardInfos);
+})
 app.get('/api/user/:slug', async (req, res) => {
     const slug = req.params.slug;
     const user = await User(slug);
