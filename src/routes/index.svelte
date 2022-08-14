@@ -4,7 +4,8 @@
     import { allCards } from '$lib/store/utils';
     import Translation from '$lib/components/Translation.svelte';
     import Card from '$lib/components/Card.svelte';
-    import { afterNavigate, goto } from "$app/navigation";
+    import { slide, scale } from "svelte/transition";
+    import { goto } from "$app/navigation";
 
     let loading: boolean = true;
     let clipboardCopied: boolean = false;
@@ -13,6 +14,7 @@
     let history: any[] = [];
 
     let searchByCard: boolean = true;
+    let validatedDigit: boolean = false;
     let hideNoDataCards: boolean = false;
     let allRulesCards: any[] = [];
 
@@ -20,44 +22,19 @@
     let platinumCheck: boolean = true;
 
     function onQuery(){
-
+        if (query === '')
+        {
+            shownCards = $allCards;
+            OnCheck();
+            return;
+        }
+        
         if (!searchByCard)
         {
-            // Check if query is a number
-            if(!isNaN(parseInt(query))){
-                if ($allCards){
-                    allRulesCards = [];
-                    $allCards.forEach(card => {
-                        fetch(`${dev ? 'http://localhost:3000' : ''}/api/card_infos/${card.slug}/${query}`)
-                        .then(res => res.json())
-                        .then(data => {
-                            const obj = Object.assign(data, {
-                                name: `${card.artist.displayName} #${query}`,
-                                isCommon: card.slug.includes('common'),
-                                found: true
-                            })
-                            allRulesCards = [obj].concat(allRulesCards);
-                        })
-                        .catch(err => {
-                            const obj = {
-                                name: `${card.artist.displayName} #${query}`,
-                                isCommon: card.slug.includes('common'),
-                                found: false
-                            };
-                            allRulesCards = [...allRulesCards, obj];
-                        });
-                    });
-                }
-            }
+            validatedDigit = false;
         }
         else
         {
-            if (query === '')
-            {
-                shownCards = $allCards;
-                OnCheck();
-                return;
-            }
             shownCards = $allCards.filter(card => {
                 if (commonCheck && platinumCheck)
                 {
@@ -73,6 +50,42 @@
                 }
                 return false;
             });
+        }
+    }
+
+    function OnSearchByDigit(){
+        if (query === '')
+        {
+            allRulesCards = [];
+            return;
+        }
+
+        // Check if query is a number
+        if(!isNaN(parseInt(query))){
+            if ($allCards){
+                validatedDigit = true;
+                allRulesCards = [];
+                $allCards.forEach(card => {
+                    fetch(`${dev ? 'http://localhost:3000' : ''}/api/card_infos/${card.slug}/${query}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        const obj = Object.assign(data, {
+                            name: `${card.artist.displayName} #${query}`,
+                            isCommon: card.slug.includes('common'),
+                            found: true
+                        })
+                        allRulesCards = [obj].concat(allRulesCards);
+                    })
+                    .catch(err => {
+                        const obj = {
+                            name: `${card.artist.displayName} #${query}`,
+                            isCommon: card.slug.includes('common'),
+                            found: false
+                        };
+                        allRulesCards = [...allRulesCards, obj];
+                    });
+                });
+            }
         }
     }
 
@@ -154,20 +167,30 @@
                 <input
                     bind:value={query}
                     on:input={onQuery}
+                    on:keydown={(e) => {
+                        if (e.key === 'Enter' && !searchByCard)
+                        {
+                            OnSearchByDigit();
+                        }
+                    }}
                     placeholder="..."
                     type="text"
                     class="input input-primary w-full"
                 />
-                <select class="select select-primary">
-                    <option disabled selected>Historique</option>
-                    {#each history.reverse() as h}
-                        <option on:click={() => goto(`${h.link}`)}>{h.name}</option>
-                    {/each}
-                </select>
+                {#if searchByCard}
+                    <select class="select select-primary">
+                        <option disabled selected>Historique</option>
+                        {#each history.reverse() as h}
+                            <option on:click={() => goto(`${h.link}`)}>{h.name}</option>
+                        {/each}
+                    </select>
+                {:else}
+                    <button on:click={OnSearchByDigit} disabled={validatedDigit} class="btn btn-success border border-primary">Valider&nbsp;<i class="fa-solid fa-check"></i></button>
+                {/if}
             </div>
         </div>
     </div>
-    <div class="flex flex-row space-x-2 w-full">
+    <div class="flex lg:flex-row flex-col space-x-2 w-full">
         <div class="form-control space-x-2" >
             <label class="label cursor-pointer">
             <span class="label-text"><Translation id="common"/>&nbsp;</span> 
@@ -187,7 +210,7 @@
             </label>
         </div>
         {#if !searchByCard}
-            <div class="form-control">
+            <div class="form-control" transition:scale>
                 <label class="label cursor-pointer">
                     <span class="label-text">Masquer les cartes sans donnée&nbsp;</span> 
                     <input type="checkbox" bind:checked={hideNoDataCards} class="checkbox"/>
@@ -196,15 +219,17 @@
         {/if}
     </div>
     {#if searchByCard}
-        {#each shownCards as card}
-            <Card
-                name={card.artist.displayName}
-                pictureUrl={card.pictureUrl}
-                season={card.season}
-                slug={card.slug}
-                cardsMintedCount={card.cardsMintedCount}
-            />
-        {/each}
+        <div class="w-full space-y-3" transition:slide >
+            {#each shownCards as card}
+                <Card
+                    name={card.artist.displayName}
+                    pictureUrl={card.pictureUrl}
+                    season={card.season}
+                    slug={card.slug}
+                    cardsMintedCount={card.cardsMintedCount}
+                />
+            {/each}
+        </div>
     {:else}
         <div class="w-full overflow-x-auto">
             <table class="table w-full">
@@ -267,12 +292,14 @@
                             <td>{new Date(card.ownerSince).toLocaleString('FR')}</td>
                             <th>
                                 {#if card.owner.user.profile.discordUser}
-                                    <div class="tooltip tooltip-bottom" class:tooltip-success={clipboardCopied} data-tip={clipboardCopied ? 'Copied !' : "Copy"}>
-                                        <p class="font-semibold inline hover:underline cursor-pointer" on:click={() => {
-                                            clipboardCopied = true;
-                                            navigator.clipboard.writeText(`${card.owner.user.profile.discordUser.username}#${card.owner.user.profile.discordUser.discriminator}`)
-                                        }}>{card.owner.user.profile.discordUser.username} #{card.owner.user.profile.discordUser.discriminator}</p>
-                                    </div>
+                                    {#if card.owner.user.profile.discordUser.username !== null && card.owner.user.profile.discordUser.discriminator !== null}
+                                        <div class="tooltip tooltip-bottom" class:tooltip-success={clipboardCopied} data-tip={clipboardCopied ? 'Copied !' : "Copy"}>
+                                            <p class="font-semibold inline hover:underline cursor-pointer" on:click={() => {
+                                                clipboardCopied = true;
+                                                navigator.clipboard.writeText(`${card.owner.user.profile.discordUser.username}#${card.owner.user.profile.discordUser.discriminator}`)
+                                            }}>{card.owner.user.profile.discordUser.username} #{card.owner.user.profile.discordUser.discriminator}</p>
+                                        </div>
+                                    {/if}
                                 {/if}
                             </th>
                         </tr>

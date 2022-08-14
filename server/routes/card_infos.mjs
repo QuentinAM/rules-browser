@@ -38,6 +38,9 @@ export default function GetCardByIdInfos(card, id)
         .then(res => res.json())
         .then(res => {
             resolve(res.data.card)
-        });
+        })
+        .catch(err => {
+            console.log(err);
+        }) 
     });
 }
