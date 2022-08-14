@@ -8,10 +8,10 @@
 	</div>
 	<div class="flex-none">
 		<a class="link link-hover" href="https://github.com/QuentinAM/rules-browser/tree/main" target="_blank">Github <i class="fa-brands fa-github"></i></a>
-		&nbsp;
+		<!-- &nbsp;
 		by
 		&nbsp;
-		<a class="link link-hover" href="https://github.com/QuentinAM/" target="_blank">QuentinAM</a>
+		<a class="link link-hover" href="https://github.com/QuentinAM/" target="_blank">QuentinAM</a> -->
 		<div class="divider divider-horizontal"></div>
 		<LanguageSelector />
 	</div>
