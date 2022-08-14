@@ -281,11 +281,11 @@
 
 <div class="form-control w-full">
     <label class="label cursor-pointer">
-        <span class="label-text">Maquer les cartes sans donnée</span> 
+        <span class="label-text">Masquer les cartes sans donnée</span> 
         <input type="checkbox" bind:checked={hideNoDataCards} class="checkbox" />
     </label>
 </div>
-<div class="w-full">
+<div class="w-full overflow-x-auto">
     <table class="table w-full">
       <!-- head -->
       <thead>
