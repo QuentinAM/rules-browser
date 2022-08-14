@@ -24,10 +24,12 @@
             {/if}
         </h2>
         <div>Saison {season}
-            {#if isCommon}
-                <p><Translation id="last_obtained"/>: #{cardsMintedCount}</p>
-            {:else}
-                <p>{cardsMintedCount} <Translation id="already_obtained"/>!</p>
+            {#if cardsMintedCount}
+                {#if isCommon}
+                    <p><Translation id="last_obtained"/>: #{cardsMintedCount}</p>
+                {:else}
+                    <p>{cardsMintedCount} <Translation id="already_obtained"/>!</p>
+                {/if}
             {/if}
         </div>
         <div class="card-actions justify-end">

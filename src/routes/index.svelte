@@ -131,6 +131,21 @@
                 allCards.set(data);
                 shownCards = data;
                 loading = false;
+
+                let tempArray: any[] = $allCards;
+
+                for (let i = 0; i < $allCards.length; i++){
+                    fetch(`${dev ? 'http://localhost:3000' : ''}/api/card_count/${$allCards[i].slug}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        tempArray[i].cardsMintedCount = data.cardsMintedCount;
+                        if (i === $allCards.length - 1){
+                            allCards.set(tempArray);
+                            shownCards = tempArray;
+                        }
+                    })
+                    .catch(err => console.log(err));
+                }
             });
         }
         else

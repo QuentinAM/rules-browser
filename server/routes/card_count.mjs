@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 
-export default function GetAllCardModels()
+export default function GetCardCount(card)
 {
     return new Promise((resolve, reject) => {
         fetch('https://api.rules.art/graphql', {
@@ -15,20 +15,16 @@ export default function GetAllCardModels()
         },
         body: JSON.stringify({ query: `
                 query{
-                    allCardModels{
-                        slug,
-                        pictureUrl,
-                        artist{
-                          displayName
-                        },
-                        season
+                    cardModel(slug: "${card}"){
+                        cardsMintedCount
                     }
                 }` 
             }),
         })
         .then(res => res.json())
         .then(res => {
-            resolve(res.data.allCardModels)
-        });
+            resolve(res.data.cardModel);
+        })
+        .catch(err => console.log(err));
     });
 }
