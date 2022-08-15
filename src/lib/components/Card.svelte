@@ -7,7 +7,7 @@
     export let pictureUrl: string;
     export let season: string;
     export let slug: string;
-    export let cardsMintedCount: string;
+    export let cardsMintedCount: string = '';
 
     const isCommon: boolean = slug.includes('common');
 
@@ -25,14 +25,14 @@
             {/if}
         </h2>
         <div>Saison {season}
-            {#if cardsMintedCount}
+            {#if cardsMintedCount !== ''}
                 {#if isCommon}
                     <p><Translation id="last_obtained"/>: #{cardsMintedCount}</p>
                 {:else}
                     <p>{cardsMintedCount} <Translation id="already_obtained"/>!</p>
                 {/if}
             {:else}
-             <img src={Spinner} class="animate-spin h-8 mt-1" alt="Loading..." />
+                <img src={Spinner} class="animate-spin h-8 mt-1" alt="Loading..." />
             {/if}
         </div>
         <div class="card-actions justify-end">
