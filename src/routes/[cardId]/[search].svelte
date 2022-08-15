@@ -7,6 +7,7 @@
     import { allCards } from '$lib/store/utils';
     import Favicon from "$lib/assets/favicon.png";
     import viewport from "$lib/viewport";
+    import Spinner from '$lib/assets/spinner.png';
 
     const cardId = $page.params.cardId;
     const search = $page.params.search;
@@ -370,12 +371,12 @@
                 </tr>
             {/if}
         {/each}
-        {#if fetchingCards}
-            <div class="flex flex-col items-center justify-center">
-                <div class="radial-progress animate-spin text-primary" style="--value:70;"></div>
-                <h1>Chargement des cartes de {startIndex} à {startIndex + 10}</h1>
-            </div>
-        {/if}
       </tbody>
     </table>
 </div>
+{#if fetchingCards}
+    <div class="flex flex-col items-center justify-center">
+        <img src={Spinner} class="animate-spin h-14" alt="Loading..." />
+        <h1>Chargement des cartes de {startIndex} à {startIndex + 10}</h1>
+    </div>
+{/if}

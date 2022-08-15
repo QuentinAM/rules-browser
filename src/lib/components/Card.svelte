@@ -1,6 +1,7 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import Translation from "./Translation.svelte";
+    import Spinner from '$lib/assets/spinner.png';
 
     export let name: string;
     export let pictureUrl: string;
@@ -30,6 +31,8 @@
                 {:else}
                     <p>{cardsMintedCount} <Translation id="already_obtained"/>!</p>
                 {/if}
+            {:else}
+             <img src={Spinner} class="animate-spin h-8 mt-1" alt="Loading..." />
             {/if}
         </div>
         <div class="card-actions justify-end">

@@ -6,6 +6,7 @@
     import Card from '$lib/components/Card.svelte';
     import { slide, scale } from "svelte/transition";
     import { goto } from "$app/navigation";
+    import Spinner from '$lib/assets/spinner.png';
 
     let loading: boolean = true;
     let clipboardCopied: boolean = false;
@@ -169,7 +170,7 @@
     (s/o <a class="text-primary hover:underline" href="https://github.com/0xChqrles" target="_blank">Chqrles</a>)
 </div>
 {#if loading}
-    <div class="radial-progress animate-spin text-primary" style="--value:70;"></div>
+    <img src={Spinner} class="animate-spin h-20" alt="Loading..." />
     <h1><Translation id="loading"/></h1>
 {:else}
     <div class="form-control w-full">
