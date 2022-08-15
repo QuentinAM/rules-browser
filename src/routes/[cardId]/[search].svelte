@@ -260,8 +260,7 @@
                         bind:value={query}
                         on:input={OnInputChange}
                         placeholder="..."
-                        type="number"
-                        min="1"
+                        type="text"
                         class="input input-primary w-full"
                     />
                 </div>
