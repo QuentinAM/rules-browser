@@ -201,7 +201,7 @@
                         {/each}
                     </select>
                 {:else}
-                    <button on:click={OnSearchByDigit} disabled={validatedDigit} class="btn btn-success border border-primary">Valider&nbsp;<i class="fa-solid fa-check"></i></button>
+                    <button on:click={OnSearchByDigit} disabled={validatedDigit} class="btn btn-success border border-primary"><Translation id="validate"/>&nbsp;<i class="fa-solid fa-check"></i></button>
                 {/if}
             </div>
         </div>
@@ -221,14 +221,14 @@
         </div>
         <div class="form-control">
             <label class="label cursor-pointer">
-                <span class="label-text">Chercher par <span class:font-semibold={!searchByCard}>numéro</span>/<span class:font-semibold={searchByCard}>carte</span>&nbsp;</span> 
+                <span class="label-text"><Translation id="search_by"/> <span class:font-semibold={!searchByCard}><Translation id="number"/></span>/<span class:font-semibold={searchByCard}><Translation id="card"/></span>&nbsp;</span> 
                 <input type="checkbox" bind:checked={searchByCard} class="toggle"/>
             </label>
         </div>
         {#if !searchByCard}
             <div class="form-control" transition:scale>
                 <label class="label cursor-pointer">
-                    <span class="label-text">Masquer les cartes sans donnée&nbsp;</span> 
+                    <span class="label-text"><Translation id="hide"/>&nbsp;</span> 
                     <input type="checkbox" bind:checked={hideNoDataCards} class="checkbox"/>
                 </label>
             </div>
@@ -252,9 +252,9 @@
             <!-- head -->
             <thead>
                 <tr>
-                    <th>Collectionneur</th>
-                    <th>Carte</th>
-                    <th>Depuis</th>
+                    <th><Translation id="collection"/></th>
+                    <th><Translation id="card"/></th>
+                    <th><Translation id="since"/></th>
                     <th>Discord <i class="fa-brands fa-discord"></i></th>
                 </tr>
             </thead>
@@ -264,7 +264,7 @@
                         <div></div>
                     {:else if !card.found && !hideNoDataCards}
                         <tr>
-                            <th class="text-error">Pas de donnée</th>
+                            <th class="text-error"><Translation id="no_data"/></th>
                             <th>
                                 {card.name}
                                 {#if card.isCommon}

@@ -15,7 +15,18 @@
        "error": "Erreur, la carte ne doit pas avoir de possesseur.",
        "not_available": "Non disponible",
        "description": "Rules browser est un petit site pour rechercher des cartes spécifiques sur",
-       "history": "Historique"
+       "history": "Historique",
+       "validate": "Valider",
+       "number": "numéro",
+       "card": "carte",
+       "search_by": "Rechercher par",
+       "hide": "Masquer les cartes sans donnée",
+       "no_data": "Pas de donnée",
+       "collection": "Collectionneur",
+       "see_card": "Voir la cart sur rules",
+       "loading_table": "Chargement des cartes",
+       "to": "à",
+       "start_index": "Index de départ de la table"
     },
     "EN": {
         "home": "Home",
@@ -33,6 +44,17 @@
         "error": "Error, card might not have an owner",
         "not_available": "Not available",
         "description": "Rules browser is a small site to search for specific cards on",
-        "history": "History"
+        "history": "History",
+        "validate": "Validate",
+        "number": "number",
+        "card": "card",
+        "search_by": "Search by",
+        "hide": "Hide cards without data",
+        "no_data": "No data",
+        "collection": "collector",
+        "see_card": "See card on rules",
+        "loading_table": "Loading cards from",
+        "to": "to",
+        "start_index": "Start index of the table"
     }
 }
