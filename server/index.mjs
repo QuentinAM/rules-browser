@@ -11,36 +11,36 @@ import { handler } from '../build/handler.js';
 const app = express();
 app.use(cors());
 app.get('/api/cards', async (req, res) => {
-    const allCardsModels = await GetAllCardModels();
-    res.send(allCardsModels);
+	const allCardsModels = await GetAllCardModels();
+	res.send(allCardsModels);
 });
 app.get('/api/card/:card/:id', async (req, res) => {
-    const card = req.params.card;
-    const id = req.params.id;
-    const cardById = await GetCardById(card, id);
-    res.send(cardById);
+	const card = req.params.card;
+	const id = req.params.id;
+	const cardById = await GetCardById(card, id);
+	res.send(cardById);
 });
 app.get('/api/card_infos/:card/:id', async (req, res) => {
-    const card = req.params.card;
-    const id = req.params.id;
-    const cardInfos = await GetCardByIdInfos(card, id);
-    res.send(cardInfos);
-})
+	const card = req.params.card;
+	const id = req.params.id;
+	const cardInfos = await GetCardByIdInfos(card, id);
+	res.send(cardInfos);
+});
 app.get('/api/user/:slug', async (req, res) => {
-    const slug = req.params.slug;
-    const user = await User(slug);
-    res.send(user);
+	const slug = req.params.slug;
+	const user = await User(slug);
+	res.send(user);
 });
 app.get('/api/card_range/:card/:start', async (req, res) => {
-    const card = req.params.card;
-    const start = req.params.start;
-    const cardByRange = await GetCardByRange(card, start);
-    res.send(cardByRange);
+	const card = req.params.card;
+	const start = req.params.start;
+	const cardByRange = await GetCardByRange(card, start);
+	res.send(cardByRange);
 });
 app.get('/api/card_count/:card', async (req, res) => {
-    const card = req.params.card;
-    const cardCount = await GetCardCount(card);
-    res.send(cardCount);
+	const card = req.params.card;
+	const cardCount = await GetCardCount(card);
+	res.send(cardCount);
 });
 app.use(handler);
 app.listen(3000, () => console.log('Listening on port 3000!'));
