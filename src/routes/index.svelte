@@ -126,16 +126,16 @@
 					shownCards = data;
 					loading = false;
 
-					let tempArray: any[] = $allCards;
+					let tempArray: any[] = data;
 
-					for (let i = 0; i < $allCards.length; i++) {
-						fetch(`${dev ? 'http://localhost:3000' : ''}/api/card_count/${$allCards[i].slug}`)
+					for (let i = 0; i < data.length; i++) {
+						fetch(`${dev ? 'http://localhost:3000' : ''}/api/card_count/${data[i].slug}`)
 							.then((res) => res.json())
 							.then((data) => {
-								tempArray[i].cardsMintedCount = data.cardsMintedCount;
-								if (i === $allCards.length - 1) {
-									allCards.set(tempArray);
-									shownCards = tempArray;
+								shownCards[i].cardsMintedCount = data.cardsMintedCount;
+								if (i === data.length - 1) {
+									allCards.set(shownCards);
+									console.log('All counts set');
 								}
 							})
 							.catch((err) => console.log(err));

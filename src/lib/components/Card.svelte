@@ -25,7 +25,7 @@
 		</h2>
 		<div>
 			Saison {season}
-			{#if cardsMintedCount !== ''}
+			{#if cardsMintedCount}
 				{#if isCommon}
 					<p><Translation id="last_obtained" />: #{cardsMintedCount}</p>
 				{:else}
