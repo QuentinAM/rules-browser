@@ -181,15 +181,17 @@
 					Setup();
 					loading = false;
 
-					let tempArray: any[] = $allCards;
-
 					for (let i = 0; i < $allCards.length; i++) {
 						fetch(`${dev ? 'http://localhost:3000' : ''}/api/card_count/${$allCards[i].slug}`)
 							.then((res) => res.json())
 							.then((data) => {
-								tempArray[i].cardsMintedCount = data.cardsMintedCount;
+								$allCards[i].cardsMintedCount = data.cardsMintedCount;
+								if ($allCards[i].artist.displayName === artistName){
+									cardCount = data.cardsMintedCount;
+								}
+								
 								if (i === $allCards.length - 1) {
-									allCards.set(tempArray);
+									allCards.set($allCards);
 								}
 							})
 							.catch((err) => console.log(err));
@@ -240,8 +242,8 @@
 				<label class="label">
 					<span class="label-text">
 						<Translation id="search" />
-						{#if cardCount !== 0}
-							<span class="text-sm">({cardCount} <Translation id="cards_obtained" />)</span>
+						{#if cardCount !== 0 && cardCount !== undefined}
+							<span class="text-sm">({cardCount}<span class="text-slate-500">{isCommon ? '/4000' : '/350'}</span> <Translation id="cards_obtained" />)</span>
 						{/if}
 					</span>
 					<input class="hidden" />
@@ -252,8 +254,10 @@
 					data-tip="Accept only number"
 				>
 					<input
-						bind:value={query}
-						on:input={OnInputChange}
+						on:input={(e) => {
+							query = e?.target?.value;
+							OnInputChange();
+						}}
 						placeholder="..."
 						type="text"
 						class="input input-primary w-full"

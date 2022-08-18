@@ -126,8 +126,6 @@
 					shownCards = data;
 					loading = false;
 
-					let tempArray: any[] = data;
-
 					for (let i = 0; i < data.length; i++) {
 						fetch(`${dev ? 'http://localhost:3000' : ''}/api/card_count/${data[i].slug}`)
 							.then((res) => res.json())

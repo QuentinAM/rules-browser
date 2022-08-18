@@ -27,9 +27,9 @@
 			Saison {season}
 			{#if cardsMintedCount}
 				{#if isCommon}
-					<p><Translation id="last_obtained" />: #{cardsMintedCount}</p>
+					<p><Translation id="last_obtained" />: #{cardsMintedCount}<span class="text-slate-500">/#4000</span></p>
 				{:else}
-					<p>{cardsMintedCount} <Translation id="already_obtained" />!</p>
+					<p>{cardsMintedCount}<span class="text-slate-500">/350</span> <Translation id="already_obtained" />!</p>
 				{/if}
 			{:else}
 				<img src={Spinner} class="animate-spin h-8 mt-1" alt="Loading..." />
