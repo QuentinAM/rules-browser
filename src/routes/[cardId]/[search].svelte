@@ -27,6 +27,7 @@
 	let dataQuery: any = {};
 	let userQuery: any = {};
 	let cardCount: number = 0;
+	let max: number = 0;
 	let allRulesCards: any[] = [];
 	let hideNoDataCards: boolean = false;
 
@@ -96,7 +97,7 @@
 			// Check if query is a number
 			if (!isNaN(parseInt(query))) {
 				// Check if query is a valid number
-				if (parseInt(query) > 0 && parseInt(query) <= cardCount) {
+				if (parseInt(query) > 0 && parseInt(query) <= max) {
 					validQuery = true;
 					UpdateHistory(query);
 					fetch(`${dev ? 'http://localhost:3000' : ''}/api/card/${cardId}/${query}`)
@@ -119,18 +120,25 @@
 						});
 				} else {
 					validQuery = false;
+					dataQuery = {};
+					userQuery = {};
 				}
 			} else {
 				validQuery = false;
+				dataQuery = {};
+				userQuery = {};
 			}
 		} else {
 			validQuery = false;
+			dataQuery = {};
+			userQuery = {};
 		}
 	}
 
 	function Setup() {
 		const card = $allCards.find((card) => card.slug === cardId);
 		isCommon = cardId.includes('common');
+		max = isCommon ? 4000 : 350;
 		cardCount = card.cardsMintedCount;
 		pictureUrl = card.pictureUrl;
 		artistName = card.artist.displayName;
