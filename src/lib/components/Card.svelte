@@ -13,8 +13,8 @@
 </script>
 
 <div class="card card-side bg-base-100 shadow-xl w-full">
-	<figure><img src={pictureUrl} loading="lazy" class="lg:h-52 h-40" alt="Movie" /></figure>
-	<div class="card-body">
+	<figure><img src={pictureUrl} loading="lazy" class="lg:w-52 h-full w-36" alt="Movie" /></figure>
+	<div class="card-body lg:p-4 p-2">
 		<h2 class="card-title">
 			{name}
 			{#if isCommon}

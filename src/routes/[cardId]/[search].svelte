@@ -2,6 +2,7 @@
 	import { dev } from '$app/env';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
+	import { slide } from 'svelte/transition';
 	import Translation from '$lib/components/Translation.svelte';
 	import { goto } from '$app/navigation';
 	import { allCards } from '$lib/store/utils';
@@ -34,6 +35,10 @@
 	let pictureUrl: string = '';
 	let clipboardCopied: boolean = false;
 	let error: boolean = false;
+
+	let timeout: NodeJS.Timeout;
+	let timeoutFinished: boolean = true;
+	$: query, OnInputChange();
 
 	function Reset() {
 		dataQuery = {};
@@ -98,26 +103,36 @@
 			if (!isNaN(parseInt(query))) {
 				// Check if query is a valid number
 				if (parseInt(query) > 0 && parseInt(query) <= max) {
+					if (!timeoutFinished){
+						clearTimeout(timeout);
+					}
 					validQuery = true;
-					UpdateHistory(query);
-					fetch(`${dev ? 'http://localhost:3000' : ''}/api/card/${cardId}/${query}`)
-						.then((res) => res.json())
-						.then((data) => {
-							dataQuery = data;
-							error = false;
-							fetch(`${dev ? 'http://localhost:3000' : ''}/api/user/${dataQuery.owner.user.slug}`)
-								.then((res) => res.json())
-								.then((data) => {
-									userQuery = data.profile;
-								})
-								.catch((err) => {
-									userQuery = {};
-								});
-						})
-						.catch((err) => {
-							Reset();
-							error = true;
-						});
+					timeoutFinished = false;
+					dataQuery = {};
+					userQuery = {};
+
+					timeout = setTimeout(() => {
+						timeoutFinished = true;
+						UpdateHistory(query);
+						fetch(`${dev ? 'http://localhost:3000' : ''}/api/card/${cardId}/${query}`)
+							.then((res) => res.json())
+							.then((data) => {
+								dataQuery = data;
+								error = false;
+								fetch(`${dev ? 'http://localhost:3000' : ''}/api/user/${dataQuery.owner.user.slug}`)
+									.then((res) => res.json())
+									.then((data) => {
+										userQuery = data.profile;
+									})
+									.catch((err) => {
+										userQuery = {};
+									});
+							})
+							.catch((err) => {
+								Reset();
+								error = true;
+							});
+					}, 500);
 				} else {
 					validQuery = false;
 					dataQuery = {};
@@ -235,8 +250,8 @@
 		<img src={Spinner} class="animate-spin h-14 m-2" alt="Loading..." />
 		<h1><Translation id="loading" /></h1>
 	{:else}
-		<figure><img src={pictureUrl} class="lg:h-96 h-56" alt="Movie" /></figure>
-		<div class="card-body">
+		<figure><img src={pictureUrl} class="lg:w-56 h-full w-32" alt="Movie" /></figure>
+		<div class="card-body lg:p-4 p-2">
 			<h2 class="card-title">
 				{artistName}
 				{validQuery ? `#${query}` : ''}
@@ -262,10 +277,7 @@
 					data-tip="Accept only number"
 				>
 					<input
-						on:input={(e) => {
-							query = e?.target?.value;
-							OnInputChange();
-						}}
+						bind:value={query}
 						placeholder="..."
 						type="text"
 						class="input input-primary w-full"
@@ -273,7 +285,7 @@
 				</div>
 			</div>
 			{#if error || dataQuery.owner}
-				<div class="card-actions justify-end">
+				<div class="card-actions justify-end" in:slide>
 					<div class="form-control w-full">
 						<label class="label">
 							<span class="label-text"><Translation id="result" /></span>
@@ -316,6 +328,10 @@
 							{/if}
 						</div>
 					</div>
+				</div>
+			{:else if !timeoutFinished}
+				<div class="flex items-center">
+					<img src={Spinner} class="animate-spin h-14 w-14" alt="Loading..." />
 				</div>
 			{/if}
 			{#if validQuery}
@@ -401,7 +417,7 @@
 					</tr>
 				{:else if card}
 					<tr>
-						<td>
+						<th>
 							<div class="flex items-center space-x-3">
 								<div class="avatar">
 									<div class="mask mask-squircle w-12 h-12">
@@ -431,7 +447,7 @@
 									</div>
 								</div>
 							</div>
-						</td>
+						</th>
 						<th>
 							{#if index === allRulesCards.length - 1}
 								<h1
