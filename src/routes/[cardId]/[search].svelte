@@ -250,7 +250,7 @@
 		<img src={Spinner} class="animate-spin h-14 m-2" alt="Loading..." />
 		<h1><Translation id="loading" /></h1>
 	{:else}
-		<figure><img src={pictureUrl} class="lg:w-56 h-full w-32" alt="Movie" /></figure>
+		<figure><img src={pictureUrl} class="lg:h-[21rem] w-full h-60" alt="Movie" /></figure>
 		<div class="card-body lg:p-4 p-2">
 			<h2 class="card-title">
 				{artistName}
