@@ -12,8 +12,8 @@
 	const isCommon: boolean = slug.includes('common');
 </script>
 
-<div class="card card-side bg-base-100 shadow-xl w-full">
-	<figure><img src={pictureUrl} loading="lazy" class="lg:w-52 h-full w-36" alt="Movie" /></figure>
+<div class="card card-side bg-base-100 shadow-xl w-full overflow-x-hidden">
+	<figure><img src={pictureUrl} loading="lazy" class="lg:w-44 md:w-40 h-full w-36" alt="Movie" /></figure>
 	<div class="card-body lg:p-4 p-2">
 		<h2 class="card-title">
 			{name}
@@ -35,7 +35,7 @@
 				<img src={Spinner} class="animate-spin h-8 mt-1" alt="Loading..." />
 			{/if}
 		</div>
-		<div class="card-actions justify-end">
+		<div class="card-actions justify-end lg:mt-20">
 			<button class="btn btn-primary" on:click={() => goto(`/${slug}/search`)}
 				><Translation id="view" /></button
 			>

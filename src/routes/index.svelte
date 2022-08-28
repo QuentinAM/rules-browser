@@ -176,7 +176,7 @@
 			<span class="label-text"><Translation id="search" /></span>
 			<input class="hidden" />
 		</label>
-		<div class="form-control">
+		<div class="form-control w-full">
 			<div class="input-group">
 				<input
 					bind:value={query}
