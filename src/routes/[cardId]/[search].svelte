@@ -90,6 +90,14 @@
 		}
 	}
 
+	function FormatPrice(str: string){
+		// Hexa to decimal
+		const price = parseInt(str, 16);
+
+		// Wei to ETH
+		return (price / 1000000000000000000).toFixed(2);
+	}
+
 	function OnInputChange() {
 		clipboardCopied = false;
 		if (query === '') {
@@ -325,6 +333,13 @@
 										<p class="text-error inline"><Translation id="not_available" /></p>
 									{/if}
 								</div>
+								<div>
+									{#if dataQuery.onSale}
+										<div class="badge bg-orange-700 font-semibold text-white"><Translation id="sale" /> - {FormatPrice(dataQuery.currentOffer.price)} ETH</div>
+									{:else}
+									<div class="badge badge-error font-semibold text-white"><Translation id="not_to_sale" /></div>
+									{/if}
+								</div>
 							{/if}
 						</div>
 					</div>
@@ -387,6 +402,7 @@
 				<th><Translation id="card" /></th>
 				<th><Translation id="since" /></th>
 				<th>Discord <i class="fa-brands fa-discord" /></th>
+				<th><Translation id="sale" /></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -414,6 +430,7 @@
 						</th>
 						<td />
 						<th />
+						<th></th>
 					</tr>
 				{:else if card}
 					<tr>
@@ -455,10 +472,10 @@
 									on:enterViewport={() => FetchNextRulesCards()}
 									on:exitViewport={() => {}}
 								>
-									{artistName} #{index + tableQueryAfterValidate}
+									<a class="link link-hover" target="__blank" href={`https://rules.art/card/${card.slug.substr(0, card.slug.lastIndexOf("-"))}/${index + tableQueryAfterValidate}`}>{artistName} #{index + tableQueryAfterValidate}</a>
 								</h1>
 							{:else}
-								{artistName} #{index + tableQueryAfterValidate}
+								<a class="link link-hover" target="__blank" href={`https://rules.art/card/${card.slug.substr(0, card.slug.lastIndexOf("-"))}/${index + tableQueryAfterValidate}`}>{artistName} #{index + tableQueryAfterValidate}</a>
 							{/if}
 							{#if isCommon}
 								<div class="badge badge-primary"><Translation id="common" /></div>
@@ -487,6 +504,11 @@
 											.discordUser.discriminator}
 									</p>
 								</div>
+							{/if}
+						</th>
+						<th>
+							{#if card.onSale}
+								<div class="badge bg-orange-700 font-semibold text-white"><Translation id="sale" /> - {FormatPrice(card.currentOffer.price)} ETH</div>
 							{/if}
 						</th>
 					</tr>

@@ -8,13 +8,16 @@
 	export let season: string;
 	export let slug: string;
 	export let cardsMintedCount: string = '';
+	export let cardsOnSaleCount: string = '';
+	export let lowestAsk: string = '';
+	export let averageSale: string = '';
 
 	const isCommon: boolean = slug.includes('common');
 </script>
 
 <div class="card card-side bg-base-100 shadow-xl w-full overflow-x-hidden">
-	<figure><img src={pictureUrl} loading="lazy" class="lg:w-44 md:w-40 h-full w-36" alt="Movie" /></figure>
-	<div class="card-body lg:p-4 p-2">
+	<figure><img src={pictureUrl} loading="lazy" class="lg:w-52 md:w-40 md:h-full w-[10rem]" alt="Movie" /></figure>
+	<div class="card-body lg:p-4 p-2 relative">
 		<h2 class="card-title">
 			{name}
 			{#if isCommon}
@@ -23,7 +26,7 @@
 				<div class="badge bg-slate-400 text-black"><Translation id="platinum" /></div>
 			{/if}
 		</h2>
-		<div>
+		<div class="lg:text-lg md:text-md text-xs">
 			Saison {season}
 			{#if cardsMintedCount}
 				{#if isCommon}
@@ -34,11 +37,14 @@
 			{:else}
 				<img src={Spinner} class="animate-spin h-8 mt-1" alt="Loading..." />
 			{/if}
-		</div>
-		<div class="card-actions justify-end lg:mt-20">
-			<button class="btn btn-primary" on:click={() => goto(`/${slug}/search`)}
-				><Translation id="view" /></button
-			>
+
+			<div class="bg-base-200 rounded p-3 mt-2">
+				<h1 class="font-semibold"><Translation id="market" /> <i class="fa-solid fa-money-bill-trend-up"></i></h1>
+				<div><Translation id="on_sale" />: <span class=" font-semibold">{cardsOnSaleCount}</span></div>
+				<div><Translation id="lowest_ask" />: <span class=" font-semibold">{lowestAsk} ETH </span></div>
+				<!-- <div><Translation id="average_sale" />: <span class=" font-semibold">{averageSale} ETH </span></div> -->
+			</div>
+			<button class="btn btn-primary absolute bottom-3 right-3" on:click={() => goto(`/${slug}/search`)}><Translation id="view" /></button>
 		</div>
 	</div>
 </div>

@@ -85,6 +85,14 @@
 		}
 	}
 
+	function FormatPrice(str: string){
+		// Hexa to decimal
+		const price = parseInt(str, 16);
+
+		// Wei to ETH
+		return (price / 1000000000000000000).toFixed(6);
+	}
+
 	function OnCheck() {
 		if (commonCheck && platinumCheck) {
 			shownCards = $allCards.filter((card) => {
@@ -250,6 +258,9 @@
 					season={card.season}
 					slug={card.slug}
 					cardsMintedCount={card.cardsMintedCount}
+					cardsOnSaleCount={card.cardsOnSaleCount}
+					lowestAsk={FormatPrice(card.lowestAsk)}
+					averageSale={FormatPrice(card.averageSale)}
 				/>
 			{/each}
 		</div>
@@ -263,6 +274,7 @@
 						<th><Translation id="card" /></th>
 						<th><Translation id="since" /></th>
 						<th>Discord <i class="fa-brands fa-discord" /></th>
+						<th><Translation id="sale" /></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -282,6 +294,7 @@
 								</th>
 								<td />
 								<th />
+								<th></th>
 							</tr>
 						{:else if card.found}
 							<tr>
@@ -317,7 +330,7 @@
 									</div>
 								</th>
 								<th>
-									{card.name}
+									<a class="link link-hover" target="__blank" href={`https://rules.art/card/${card.slug.substr(0, card.slug.lastIndexOf("-"))}/${query}`}>{card.name}</a>
 									{#if card.isCommon}
 										<div class="badge badge-primary"><Translation id="common" /></div>
 									{:else}
@@ -347,6 +360,11 @@
 												</p>
 											</div>
 										{/if}
+									{/if}
+								</th>
+								<th>
+									{#if card.onSale}
+										<div class="badge bg-orange-700 text-white font-semibold"><Translation id="sale" /> - {FormatPrice(card.currentOffer.price)} ETH</div>
 									{/if}
 								</th>
 							</tr>

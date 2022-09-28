@@ -27,7 +27,13 @@
 		"loading_table": "Chargement des cartes",
 		"to": "à",
 		"start_index": "Index de départ de la table",
-		"by": "par"
+		"by": "par",
+		"sale": "En vente",
+		"on_sale": "Cartes en vente",
+		"market": "Marché",
+		"lowest_ask": "Demande la plus basse",
+		"average_sale": "Prix moyen de vente",
+		"not_to_sale": "Pas disponible à la vente"
 	},
 	"EN": {
 		"home": "Home",
@@ -57,6 +63,12 @@
 		"loading_table": "Loading cards from",
 		"to": "to",
 		"start_index": "Start index of the table",
-		"by": "by"
+		"by": "by",
+		"sale": "On sale",
+		"on_sale": "Cards on sale",
+		"market": "Market",
+		"lowest_ask": "Lowest ask",
+		"average_sale": "Average sale",
+		"not_to_sale": "Not on sale"
 	}
 }

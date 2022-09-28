@@ -21,7 +21,10 @@ export default function GetAllCardModels() {
                         artist{
                           displayName
                         },
-                        season
+                        season,
+						cardsOnSaleCount,
+						lowestAsk,
+						averageSale
                     }
                 }`
 			})
