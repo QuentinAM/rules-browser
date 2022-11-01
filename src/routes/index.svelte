@@ -85,6 +85,11 @@
 		}
 	}
 
+	function FormatSale(str: string){
+		const price = parseInt(str);
+		return (price / 1000000000000000000).toFixed(6);
+	}
+
 	function FormatPrice(str: string){
 		// Hexa to decimal
 		const price = parseInt(str, 16);
@@ -133,19 +138,6 @@
 					allCards.set(data);
 					shownCards = data;
 					loading = false;
-
-					for (let i = 0; i < data.length; i++) {
-						fetch(`${dev ? 'http://localhost:3000' : ''}/api/card_count/${data[i].slug}`)
-							.then((res) => res.json())
-							.then((data) => {
-								shownCards[i].cardsMintedCount = data.cardsMintedCount;
-								if (i === data.length - 1) {
-									allCards.set(shownCards);
-									console.log('All counts set');
-								}
-							})
-							.catch((err) => console.log(err));
-					}
 				});
 		} else {
 			console.log('Cards already fetched.');
@@ -260,7 +252,7 @@
 					cardsMintedCount={card.cardsMintedCount}
 					cardsOnSaleCount={card.cardsOnSaleCount}
 					lowestAsk={FormatPrice(card.lowestAsk)}
-					averageSale={FormatPrice(card.averageSale)}
+					averageSale={FormatSale(card.averageSale)}
 				/>
 			{/each}
 		</div>

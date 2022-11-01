@@ -24,7 +24,8 @@ export default function GetAllCardModels() {
                         season,
 						cardsOnSaleCount,
 						lowestAsk,
-						averageSale
+						averageSale,
+						cardsMintedCount
                     }
                 }`
 			})

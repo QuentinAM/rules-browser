@@ -73,7 +73,7 @@
 		}
 
 		array.push({
-			name: `${artistName} #${query} ${isCommon ? 'Commune' : 'Platine'}`,
+			name: `${artistName} #${query} ${cardId.includes("halloween") ? 'Halloween' : isCommon ? 'Commune' : 'Platine'}`,
 			link: `/${cardId}/${query}`
 		});
 
@@ -211,22 +211,6 @@
 					allCards.set(data);
 					Setup();
 					loading = false;
-
-					for (let i = 0; i < $allCards.length; i++) {
-						fetch(`${dev ? 'http://localhost:3000' : ''}/api/card_count/${$allCards[i].slug}`)
-							.then((res) => res.json())
-							.then((data) => {
-								$allCards[i].cardsMintedCount = data.cardsMintedCount;
-								if ($allCards[i].artist.displayName === artistName){
-									cardCount = data.cardsMintedCount;
-								}
-								
-								if (i === $allCards.length - 1) {
-									allCards.set($allCards);
-								}
-							})
-							.catch((err) => console.log(err));
-					}
 				});
 		} else {
 			console.log('Cards already fetched.');
@@ -263,7 +247,9 @@
 			<h2 class="card-title">
 				{artistName}
 				{validQuery ? `#${query}` : ''}
-				{#if isCommon}
+				{#if cardId.includes("halloween")}
+					<div class="badge text-black bg-orange-400 badge-primary">Halloween</div>
+				{:else if isCommon}
 					<div class="badge badge-primary"><Translation id="common" /></div>
 				{:else}
 					<div class="badge bg-slate-400 text-black"><Translation id="platinum" /></div>
@@ -274,7 +260,7 @@
 					<span class="label-text">
 						<Translation id="search" />
 						{#if cardCount !== 0 && cardCount !== undefined}
-							<span class="text-sm">({cardCount}<span class="text-slate-500">{isCommon ? '/4000' : '/350'}</span> <Translation id="cards_obtained" />)</span>
+							<span class="text-sm">({cardCount}<span class="text-slate-500">{cardId.includes("halloween") ? '/2175' : isCommon ? '/4000' : '/350'}</span> <Translation id="cards_obtained" />)</span>
 						{/if}
 					</span>
 					<input class="hidden" />
@@ -422,7 +408,10 @@
 							{:else}
 								{artistName} #{index + tableQueryAfterValidate}
 							{/if}
-							{#if isCommon}
+							
+							{#if cardId.includes("halloween")}
+								<div class="badge text-black bg-orange-400 badge-primary">Halloween</div>
+							{:else if isCommon}
 								<div class="badge badge-primary"><Translation id="common" /></div>
 							{:else}
 								<div class="badge bg-slate-400 text-black"><Translation id="platinum" /></div>
@@ -477,7 +466,10 @@
 							{:else}
 								<a class="link link-hover" target="__blank" href={`https://rules.art/card/${card.slug.substr(0, card.slug.lastIndexOf("-"))}/${index + tableQueryAfterValidate}`}>{artistName} #{index + tableQueryAfterValidate}</a>
 							{/if}
-							{#if isCommon}
+
+							{#if cardId.includes("halloween")}
+								<div class="badge text-black bg-orange-400 badge-primary">Halloween</div>
+							{:else if isCommon}
 								<div class="badge badge-primary"><Translation id="common" /></div>
 							{:else}
 								<div class="badge bg-slate-400 text-black"><Translation id="platinum" /></div>
