@@ -297,7 +297,7 @@
 								</p>
 								<div>
 									<i class="fa-brands fa-discord" />
-									{#if userQuery.discordUser}
+									{#if userQuery.discordMember}
 										<div
 											class="tooltip tooltip-bottom"
 											class:tooltip-success={clipboardCopied}
@@ -308,11 +308,11 @@
 												on:click={() => {
 													clipboardCopied = true;
 													navigator.clipboard.writeText(
-														`${userQuery.discordUser.username}#${userQuery.discordUser.discriminator}`
+														`${userQuery.discordMember.username}#${userQuery.discordMember.discriminator}`
 													);
 												}}
 											>
-												{userQuery.discordUser.username} #{userQuery.discordUser.discriminator}
+												{userQuery.discordMember.username} #{userQuery.discordMember.discriminator}
 											</p>
 										</div>
 									{:else}
@@ -477,7 +477,7 @@
 						</th>
 						<td>{new Date(card.ownerSince).toLocaleString('FR')}</td>
 						<th>
-							{#if card.owner.user.profile.discordUser}
+							{#if card.owner.user.profile.discordMember}
 								<div
 									class="tooltip tooltip-bottom"
 									class:tooltip-success={clipboardCopied}
@@ -488,12 +488,12 @@
 										on:click={() => {
 											clipboardCopied = true;
 											navigator.clipboard.writeText(
-												`${card.owner.user.profile.discordUser.username}#${card.owner.user.profile.discordUser.discriminator}`
+												`${card.owner.user.profile.discordMember.username}#${card.owner.user.profile.discordMember.discriminator}`
 											);
 										}}
 									>
-										{card.owner.user.profile.discordUser.username} #{card.owner.user.profile
-											.discordUser.discriminator}
+										{card.owner.user.profile.discordMember.username} #{card.owner.user.profile
+											.discordMember.discriminator}
 									</p>
 								</div>
 							{/if}

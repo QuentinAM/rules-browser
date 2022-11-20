@@ -33,7 +33,7 @@ export default function GetCardByRange(slug, start) {
                                     profile{
                                         pictureUrl,
                                         certified,
-                                        discordUser{
+                                        discordMember{
                                             discriminator,
                                             username
                                         }

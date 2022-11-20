@@ -17,7 +17,7 @@ export default function GetUser(slug) {
                 query{
                     user(slug: "${slug}"){
                         profile{
-                            discordUser{
+                            discordMember{
                                 username,
                                 discriminator
                             }

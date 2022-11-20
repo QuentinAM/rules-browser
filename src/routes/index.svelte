@@ -331,8 +331,8 @@
 								</th>
 								<td>{new Date(card.ownerSince).toLocaleString('FR')}</td>
 								<th>
-									{#if card.owner.user.profile.discordUser}
-										{#if card.owner.user.profile.discordUser.username !== null && card.owner.user.profile.discordUser.discriminator !== null}
+									{#if card.owner.user.profile.discordMember}
+										{#if card.owner.user.profile.discordMember.username !== null && card.owner.user.profile.discordMember.discriminator !== null}
 											<div
 												class="tooltip tooltip-bottom"
 												class:tooltip-success={clipboardCopied}
@@ -343,12 +343,12 @@
 													on:click={() => {
 														clipboardCopied = true;
 														navigator.clipboard.writeText(
-															`${card.owner.user.profile.discordUser.username}#${card.owner.user.profile.discordUser.discriminator}`
+															`${card.owner.user.profile.discordMember.username}#${card.owner.user.profile.discordMember.discriminator}`
 														);
 													}}
 												>
-													{card.owner.user.profile.discordUser.username} #{card.owner.user.profile
-														.discordUser.discriminator}
+													{card.owner.user.profile.discordMember.username} #{card.owner.user.profile
+														.discordMember.discriminator}
 												</p>
 											</div>
 										{/if}

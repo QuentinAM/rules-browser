@@ -29,7 +29,7 @@ export default function GetCardByIdInfos(card, id) {
                                 profile{
                                     pictureUrl,
                                     certified,
-                                    discordUser{
+                                    discordMember{
                                         discriminator,
                                         username
                                     }
