@@ -161,7 +161,7 @@
 	function Setup() {
 		const card = $allCards.find((card) => card.slug === cardId);
 		isCommon = cardId.includes('common');
-		max = isCommon ? 4000 : 350;
+		max = card.scarcity.maxSupply;
 		cardCount = card.cardsMintedCount;
 		pictureUrl = card.pictureUrl;
 		artistName = card.artist.displayName;
@@ -260,7 +260,7 @@
 					<span class="label-text">
 						<Translation id="search" />
 						{#if cardCount !== 0 && cardCount !== undefined}
-							<span class="text-sm">({cardCount}<span class="text-slate-500">{cardId.includes("halloween") ? '/2175' : isCommon ? '/4000' : '/350'}</span> <Translation id="cards_obtained" />)</span>
+							<span class="text-sm">({cardCount}<span class="text-slate-500">{cardId.includes("halloween") ? '/2175' : `/${max}`}</span> <Translation id="cards_obtained" />)</span>
 						{/if}
 					</span>
 					<input class="hidden" />

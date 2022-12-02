@@ -25,7 +25,10 @@ export default function GetAllCardModels() {
 						cardsOnSaleCount,
 						lowestAsk,
 						averageSale,
-						cardsMintedCount
+						cardsMintedCount,
+						scarcity{
+							maxSupply
+						}
                     }
                 }`
 			})

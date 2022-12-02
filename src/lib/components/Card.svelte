@@ -11,6 +11,7 @@
 	export let cardsOnSaleCount: string = '';
 	export let lowestAsk: string = '';
 	export let averageSale: string = '';
+	export let maxSupply: string = '';
 
 	const isCommon: boolean = slug.includes('common');
 </script>
@@ -33,10 +34,8 @@
 			{#if cardsMintedCount}
 				{#if slug.includes("halloween")}
 					<p>{cardsMintedCount}<span class="text-slate-500">/2175</span> <Translation id="already_obtained" />!</p>
-				{:else if isCommon}
-					<p><Translation id="last_obtained" />: #{cardsMintedCount}<span class="text-slate-500">/#4000</span></p>
 				{:else}
-					<p>{cardsMintedCount}<span class="text-slate-500">/350</span> <Translation id="already_obtained" />!</p>
+					<p>{cardsMintedCount}<span class="text-slate-500">/{maxSupply}</span> <Translation id="already_obtained" />!</p>
 				{/if}
 			{:else}
 				<img src={Spinner} class="animate-spin h-8 mt-1" alt="Loading..." />

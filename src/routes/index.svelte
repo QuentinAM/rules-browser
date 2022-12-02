@@ -17,10 +17,12 @@
 	let searchByCard: boolean = true;
 	let validatedDigit: boolean = false;
 	let hideNoDataCards: boolean = false;
+	let filters: string = 'Filters';
 	let allRulesCards: any[] = [];
 
 	let commonCheck: boolean = true;
 	let platinumCheck: boolean = true;
+	let halloweenCheck: boolean = true;
 
 	function onQuery() {
 		if (query === '') {
@@ -33,19 +35,12 @@
 			validatedDigit = false;
 		} else {
 			shownCards = $allCards.filter((card) => {
-				if (commonCheck && platinumCheck) {
-					return Format(card.artist.displayName).includes(Format(query));
-				} else if (commonCheck && !platinumCheck) {
-					return (
-						Format(card.artist.displayName).includes(Format(query)) && card.slug.includes('common')
-					);
-				} else if (!commonCheck && platinumCheck) {
-					return (
-						Format(card.artist.displayName).includes(Format(query)) &&
-						card.slug.includes('platinium')
-					);
-				}
-				return false;
+				return (
+					Format(card.artist.displayName).includes(Format(query)) 
+					&& ((commonCheck && card.slug.includes('common'))
+					|| (platinumCheck && card.slug.includes('platinium'))
+					|| (halloweenCheck && card.slug.includes('halloween')))
+				);
 			});
 		}
 	}
@@ -67,7 +62,7 @@
 						.then((data) => {
 							const obj = Object.assign(data, {
 								name: `${card.artist.displayName} #${query}`,
-								isCommon: card.slug.includes('common'),
+								slug: card.slug,
 								found: true
 							});
 							allRulesCards = [obj].concat(allRulesCards);
@@ -75,7 +70,7 @@
 						.catch((err) => {
 							const obj = {
 								name: `${card.artist.displayName} #${query}`,
-								isCommon: card.slug.includes('common'),
+								slug: card.slug,
 								found: false
 							};
 							allRulesCards = [...allRulesCards, obj];
@@ -99,25 +94,61 @@
 	}
 
 	function OnCheck() {
-		if (commonCheck && platinumCheck) {
-			shownCards = $allCards.filter((card) => {
-				return Format(card.artist.displayName).includes(Format(query));
-			});
-		} else if (commonCheck && !platinumCheck) {
-			shownCards = $allCards.filter(
-				(card) =>
-					card.slug.includes('common') && Format(card.artist.displayName).includes(Format(query))
-			);
-		} else if (!commonCheck && platinumCheck) {
-			shownCards = $allCards.filter(
-				(card) =>
-					card.slug.includes('platinium') && Format(card.artist.displayName).includes(Format(query))
-			);
-		} else {
+		if (!commonCheck && !platinumCheck && !halloweenCheck)
+		{
 			shownCards = [];
 		}
+		else
+		{
+			shownCards = $allCards.filter((card) => {
+				return (
+					Format(card.artist.displayName).includes(Format(query)) 
+					&& ((commonCheck && card.slug.includes('common'))
+					|| (platinumCheck && card.slug.includes('platinium'))
+					|| (halloweenCheck && card.slug.includes('halloween')))
+				);
+			});
+		}
 	}
-	$: commonCheck, platinumCheck, OnCheck();
+
+	// Only in serch by digit
+	function OnFilters(){
+		if (filters == 'None')
+		{
+
+		}
+		else if (filters == 'Card')
+		{
+			// Sort by slug
+			allRulesCards = allRulesCards.sort((a, b) => {
+				if (a.slug < b.slug) {
+					return -1;
+				}
+				if (a.slug > b.slug) {
+					return 1;
+				}
+				return 0;
+			});
+		}
+		else
+		{
+			// Sort by slug
+			allRulesCards = allRulesCards.sort((a, b) => {
+				const aSlug = a.slug.split('-').pop();
+				const bSlug = b.slug.split('-').pop();
+				if (aSlug < bSlug) {
+					return -1;
+				}
+				if (aSlug > bSlug) {
+					return 1;
+				}
+				return 0;
+			});
+		}
+	}
+
+	$: commonCheck, platinumCheck, halloweenCheck, OnCheck();
+	$: filters, OnFilters();
 
 	function Format(str: string) {
 		// Remove spaces
@@ -221,6 +252,12 @@
 				<input type="checkbox" bind:checked={platinumCheck} class="checkbox" />
 			</label>
 		</div>
+		<div class="form-control space-x-2 ">
+			<label class="label cursor-pointer">
+				<span class="label-text">Halloween&nbsp;</span>
+				<input type="checkbox" bind:checked={halloweenCheck} class="checkbox checkbox-warning" />
+			</label>
+		</div>
 		<div class="form-control">
 			<label class="label cursor-pointer">
 				<span class="label-text"
@@ -239,6 +276,11 @@
 					<input type="checkbox" bind:checked={hideNoDataCards} class="checkbox" />
 				</label>
 			</div>
+			<select bind:value={filters} class="select w-full max-w-xs">
+				<option value="Filters" disabled selected>Filtres</option>
+				<option value="Scarcity">Rareté</option>
+				<option value="Card">Carte</option>
+			</select>
 		{/if}
 	</div>
 	{#if searchByCard}
@@ -253,6 +295,7 @@
 					cardsOnSaleCount={card.cardsOnSaleCount}
 					lowestAsk={FormatPrice(card.lowestAsk)}
 					averageSale={FormatSale(card.averageSale)}
+					maxSupply={card.scarcity.maxSupply}
 				/>
 			{/each}
 		</div>
@@ -271,14 +314,14 @@
 				</thead>
 				<tbody>
 					{#each allRulesCards as card, index}
-						{#if (card.isCommon && !commonCheck) || (!card.isCommon && !platinumCheck)}
-							<div />
-						{:else if !card.found && !hideNoDataCards}
+						{#if !card.found && !hideNoDataCards}
 							<tr>
 								<th class="text-error"><Translation id="no_data" /></th>
 								<th>
 									{card.name}
-									{#if card.isCommon}
+									{#if card.slug.includes("halloween")}
+											<div class="badge text-black bg-orange-400 badge-primary">Halloween</div>
+									{:else if card.slug.includes("common")}
 										<div class="badge badge-primary"><Translation id="common" /></div>
 									{:else}
 										<div class="badge bg-slate-400 text-black"><Translation id="platinum" /></div>
@@ -288,7 +331,7 @@
 								<th />
 								<th></th>
 							</tr>
-						{:else if card.found}
+						{:else if card.found && (commonCheck && card.slug.includes("common") || platinumCheck && card.slug.includes("platinium") || halloweenCheck && card.slug.includes("halloween"))}
 							<tr>
 								<th>
 									<div class="flex items-center space-x-3">
@@ -323,7 +366,9 @@
 								</th>
 								<th>
 									<a class="link link-hover" target="__blank" href={`https://rules.art/card/${card.slug.substr(0, card.slug.lastIndexOf("-"))}/${query}`}>{card.name}</a>
-									{#if card.isCommon}
+									{#if card.slug.includes("halloween")}
+											<div class="badge text-black bg-orange-400 badge-primary">Halloween</div>
+									{:else if card.slug.includes("common")}
 										<div class="badge badge-primary"><Translation id="common" /></div>
 									{:else}
 										<div class="badge bg-slate-400 text-black"><Translation id="platinum" /></div>
