@@ -374,7 +374,7 @@
 										<div class="badge bg-slate-400 text-black"><Translation id="platinum" /></div>
 									{/if}
 								</th>
-								<td>{new Date(card.ownerSince).toLocaleString('FR')}</td>
+								<td>{card.ownerSince ? new Date(card.ownerSince).toLocaleString('FR') : ''}</td>
 								<th>
 									{#if card.owner.user.profile.discordMember}
 										{#if card.owner.user.profile.discordMember.username !== null && card.owner.user.profile.discordMember.discriminator !== null}

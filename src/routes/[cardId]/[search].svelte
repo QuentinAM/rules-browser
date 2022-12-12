@@ -293,7 +293,7 @@
 									<img class="h-5 inline" src={Favicon} alt="" />
 									{dataQuery.owner.user.username}
 									<Translation id="since" />
-									{new Date(dataQuery.ownerSince).toLocaleString('FR')}
+									{dataQuery.ownerSince ? new Date(dataQuery.ownerSince).toLocaleString('FR') : ''}
 								</p>
 								<div>
 									<i class="fa-brands fa-discord" />
@@ -475,7 +475,7 @@
 								<div class="badge bg-slate-400 text-black"><Translation id="platinum" /></div>
 							{/if}
 						</th>
-						<td>{new Date(card.ownerSince).toLocaleString('FR')}</td>
+						<td>{card.ownerSince ? new Date(card.ownerSince).toLocaleString('FR') : ''}</td>
 						<th>
 							{#if card.owner.user.profile.discordMember}
 								<div

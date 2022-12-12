@@ -22,7 +22,6 @@ export default function GetCardById(card, id) {
                             slug
                           }
                         },
-                        ownerSince,
 						onSale,
 						currentOffer{
 							price
