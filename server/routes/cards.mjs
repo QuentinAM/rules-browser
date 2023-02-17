@@ -23,7 +23,6 @@ export default function GetAllCardModels() {
                         },
                         season,
 						cardsOnSaleCount,
-						lowestAsk,
 						averageSale,
 						cardsMintedCount,
 						scarcity{

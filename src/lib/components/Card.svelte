@@ -44,7 +44,9 @@
 			<div class="bg-base-200 rounded p-3 mt-2">
 				<h1 class="font-semibold"><Translation id="market" /> <i class="fa-solid fa-money-bill-trend-up"></i></h1>
 				<div><Translation id="on_sale" />: <span class=" font-semibold">{cardsOnSaleCount}</span></div>
-				<div><Translation id="lowest_ask" />: <span class=" font-semibold">{lowestAsk} ETH </span></div>
+				{#if lowestAsk != null}
+					<div><Translation id="lowest_ask" />: <span class=" font-semibold">{lowestAsk} ETH </span></div>
+				{/if}
 				<div><Translation id="average_sale" />: <span class=" font-semibold">{averageSale} ETH </span></div>
 			</div>
 			<button class="btn btn-primary absolute bottom-3 right-3" on:click={() => goto(`/${slug}/search`)}><Translation id="view" /></button>
