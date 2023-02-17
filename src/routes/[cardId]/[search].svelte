@@ -126,15 +126,18 @@
 							.then((res) => res.json())
 							.then((data) => {
 								dataQuery = data;
-								error = false;
-								fetch(`${dev ? 'http://localhost:3000' : ''}/api/user/${dataQuery.owner.user.slug}`)
-									.then((res) => res.json())
-									.then((data) => {
-										userQuery = data.profile;
-									})
-									.catch((err) => {
-										userQuery = {};
-									});
+								if (dataQuery.owner)
+								{
+									error = false;
+									fetch(`${dev ? 'http://localhost:3000' : ''}/api/user/${dataQuery.owner.user.slug}`)
+										.then((res) => res.json())
+										.then((data) => {
+											userQuery = data.profile;
+										})
+										.catch((err) => {
+											userQuery = {};
+										});
+								}
 							})
 							.catch((err) => {
 								Reset();
@@ -421,7 +424,7 @@
 						<th />
 						<th></th>
 					</tr>
-				{:else if card}
+				{:else if card && card.owner}
 					<tr>
 						<th>
 							<div class="flex items-center space-x-3">
@@ -477,7 +480,7 @@
 						</th>
 						<td>{card.ownerSince ? new Date(card.ownerSince).toLocaleString('FR') : ''}</td>
 						<th>
-							{#if card.owner.user.profile.discordMember}
+							{#if card.owner && card.owner.user.profile.discordMember}
 								<div
 									class="tooltip tooltip-bottom"
 									class:tooltip-success={clipboardCopied}

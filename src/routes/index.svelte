@@ -331,7 +331,7 @@
 								<th />
 								<th></th>
 							</tr>
-						{:else if card.found && (commonCheck && card.slug.includes("common") || platinumCheck && card.slug.includes("platinium") || halloweenCheck && card.slug.includes("halloween"))}
+						{:else if card.found && card.owner && (commonCheck && card.slug.includes("common") || platinumCheck && card.slug.includes("platinium") || halloweenCheck && card.slug.includes("halloween"))}
 							<tr>
 								<th>
 									<div class="flex items-center space-x-3">
@@ -376,7 +376,7 @@
 								</th>
 								<td>{card.ownerSince ? new Date(card.ownerSince).toLocaleString('FR') : ''}</td>
 								<th>
-									{#if card.owner.user.profile.discordMember}
+									{#if card.owner && card.owner.user.profile.discordMember}
 										{#if card.owner.user.profile.discordMember.username !== null && card.owner.user.profile.discordMember.discriminator !== null}
 											<div
 												class="tooltip tooltip-bottom"
