@@ -36,7 +36,7 @@
 		} else {
 			shownCards = $allCards.filter((card) => {
 				return (
-					Format(card.artist.displayName).includes(Format(query)) 
+					Format(card.artistName).includes(Format(query)) 
 					&& ((commonCheck && card.slug.includes('common'))
 					|| (platinumCheck && card.slug.includes('platinium'))
 					|| (halloweenCheck && card.slug.includes('halloween')))
@@ -61,7 +61,7 @@
 						.then((res) => res.json())
 						.then((data) => {
 							const obj = Object.assign(data, {
-								name: `${card.artist.displayName} #${query}`,
+								name: `${card.artistName} #${query}`,
 								slug: card.slug,
 								found: true
 							});
@@ -102,7 +102,7 @@
 		{
 			shownCards = $allCards.filter((card) => {
 				return (
-					Format(card.artist.displayName).includes(Format(query)) 
+					Format(card.artistName).includes(Format(query)) 
 					&& ((commonCheck && card.slug.includes('common'))
 					|| (platinumCheck && card.slug.includes('platinium'))
 					|| (halloweenCheck && card.slug.includes('halloween')))
@@ -287,7 +287,7 @@
 		<div class="w-full space-y-3" transition:slide>
 			{#each shownCards as card}
 				<Card
-					name={card.artist.displayName}
+					name={card.artistName}
 					pictureUrl={card.pictureUrl}
 					season={card.season}
 					slug={card.slug}

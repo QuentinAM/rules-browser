@@ -167,7 +167,7 @@
 		max = card.scarcity.maxSupply;
 		cardCount = card.cardsMintedCount;
 		pictureUrl = card.pictureUrl;
-		artistName = card.artist.displayName;
+		artistName = card.artistName;
 
 		// Check if search is a number
 

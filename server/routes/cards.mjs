@@ -17,10 +17,8 @@ export default function GetAllCardModels() {
                 query{
                     allCardModels{
                         slug,
-                        pictureUrl,
-                        artist{
-                          displayName
-                        },
+                        pictureUrl(derivative: "width=512"),
+                        artistName,
                         season,
 						cardsOnSaleCount,
 						averageSale,
