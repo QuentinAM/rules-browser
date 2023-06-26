@@ -16,11 +16,7 @@ export default function GetCardByIdInfos(card, id) {
 				query: `
                 query{
                     card(slug: "${card}-${id}"){
-						onSale,
 						slug,
-						currentOffer{
-							price
-						},
                         owner{
                             user{
                                 username,

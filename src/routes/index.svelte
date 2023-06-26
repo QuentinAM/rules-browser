@@ -23,6 +23,7 @@
 	let commonCheck: boolean = true;
 	let platinumCheck: boolean = true;
 	let halloweenCheck: boolean = true;
+	let holoCheck: boolean = true;
 
 	function onQuery() {
 		if (query === '') {
@@ -39,7 +40,8 @@
 					Format(card.artistName).includes(Format(query)) 
 					&& ((commonCheck && card.slug.includes('common'))
 					|| (platinumCheck && card.slug.includes('platinium'))
-					|| (halloweenCheck && card.slug.includes('halloween')))
+					|| (halloweenCheck && card.slug.includes('halloween'))
+					|| (holoCheck && card.slug.includes('holo')))
 				);
 			});
 		}
@@ -94,7 +96,7 @@
 	}
 
 	function OnCheck() {
-		if (!commonCheck && !platinumCheck && !halloweenCheck)
+		if (!commonCheck && !platinumCheck && !halloweenCheck && !holoCheck)
 		{
 			shownCards = [];
 		}
@@ -105,7 +107,8 @@
 					Format(card.artistName).includes(Format(query)) 
 					&& ((commonCheck && card.slug.includes('common'))
 					|| (platinumCheck && card.slug.includes('platinium'))
-					|| (halloweenCheck && card.slug.includes('halloween')))
+					|| (halloweenCheck && card.slug.includes('halloween'))
+					|| (holoCheck && card.slug.includes('holo')))
 				);
 			});
 		}
@@ -147,7 +150,7 @@
 		}
 	}
 
-	$: commonCheck, platinumCheck, halloweenCheck, OnCheck();
+	$: commonCheck, platinumCheck, halloweenCheck, holoCheck, OnCheck();
 	$: filters, OnFilters();
 
 	function Format(str: string) {
@@ -258,6 +261,12 @@
 				<input type="checkbox" bind:checked={halloweenCheck} class="checkbox checkbox-warning" />
 			</label>
 		</div>
+		<div class="form-control space-x-2 ">
+			<label class="label cursor-pointer">
+				<span class="label-text">Holographic&nbsp;</span>
+				<input type="checkbox" bind:checked={holoCheck} class="checkbox checkbox-info" />
+			</label>
+		</div>
 		<div class="form-control">
 			<label class="label cursor-pointer">
 				<span class="label-text"
@@ -291,9 +300,9 @@
 					pictureUrl={card.pictureUrl}
 					season={card.season}
 					slug={card.slug}
-					cardsMintedCount={card.cardsMintedCount}
-					cardsOnSaleCount={card.cardsOnSaleCount}
-					lowestAsk={FormatPrice(card.lowestAsk)}
+					cardsMintedCount={null}
+					cardsOnSaleCount={card.listedCardsCount}
+					lowestAsk={FormatPrice(card.lowSerialLowestAsk)}
 					averageSale={FormatSale(card.averageSale)}
 					maxSupply={card.scarcity.maxSupply}
 				/>
@@ -309,7 +318,7 @@
 						<th><Translation id="card" /></th>
 						<th><Translation id="since" /></th>
 						<th>Discord <i class="fa-brands fa-discord" /></th>
-						<th><Translation id="sale" /></th>
+						<!-- <th><Translation id="sale" /></th> -->
 					</tr>
 				</thead>
 				<tbody>
@@ -399,11 +408,11 @@
 										{/if}
 									{/if}
 								</th>
-								<th>
+								<!-- <th>
 									{#if card.onSale}
 										<div class="badge bg-orange-700 text-white font-semibold"><Translation id="sale" /> - {FormatPrice(card.currentOffer.price)} ETH</div>
 									{/if}
-								</th>
+								</th> -->
 							</tr>
 						{/if}
 					{/each}

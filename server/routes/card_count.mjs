@@ -16,7 +16,6 @@ export default function GetCardCount(card) {
 				query: `
                 query{
                     cardModel(slug: "${card}"){
-                        cardsMintedCount
                     }
                 }`
 			})

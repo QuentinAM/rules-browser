@@ -20,11 +20,7 @@ export default function GetCardByRange(slug, start) {
 					query: `
                     query{
                         card(slug: "${slug}-${i}"){
-							onSale,
 							slug,
-							currentOffer{
-								price
-							},
                             owner{
                                 user{
                                     username,

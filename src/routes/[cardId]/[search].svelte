@@ -165,7 +165,7 @@
 		const card = $allCards.find((card) => card.slug === cardId);
 		isCommon = cardId.includes('common');
 		max = card.scarcity.maxSupply;
-		cardCount = card.cardsMintedCount;
+		cardCount = 0;
 		pictureUrl = card.pictureUrl;
 		artistName = card.artistName;
 
@@ -252,6 +252,8 @@
 				{validQuery ? `#${query}` : ''}
 				{#if cardId.includes("halloween")}
 					<div class="badge text-black bg-orange-400 badge-primary">Halloween</div>
+				{:else if cardId.includes('holo')}
+					<div class="badge badge-info"><Translation id="holographic" /></div>
 				{:else if isCommon}
 					<div class="badge badge-primary"><Translation id="common" /></div>
 				{:else}
@@ -323,11 +325,11 @@
 									{/if}
 								</div>
 								<div>
-									{#if dataQuery.onSale}
+									<!-- {#if dataQuery.onSale}
 										<div class="badge bg-orange-700 font-semibold text-white"><Translation id="sale" /> - {FormatPrice(dataQuery.currentOffer.price)} ETH</div>
 									{:else}
 									<div class="badge badge-error font-semibold text-white"><Translation id="not_to_sale" /></div>
-									{/if}
+									{/if} -->
 								</div>
 							{/if}
 						</div>
@@ -391,7 +393,7 @@
 				<th><Translation id="card" /></th>
 				<th><Translation id="since" /></th>
 				<th>Discord <i class="fa-brands fa-discord" /></th>
-				<th><Translation id="sale" /></th>
+				<!-- <th><Translation id="sale" /></th> -->
 			</tr>
 		</thead>
 		<tbody>
@@ -414,6 +416,8 @@
 							
 							{#if cardId.includes("halloween")}
 								<div class="badge text-black bg-orange-400 badge-primary">Halloween</div>
+							{:else if cardId.includes('holo')}
+								<div class="badge badge-info"><Translation id="holographic" /></div>
 							{:else if isCommon}
 								<div class="badge badge-primary"><Translation id="common" /></div>
 							{:else}
@@ -472,6 +476,8 @@
 
 							{#if cardId.includes("halloween")}
 								<div class="badge text-black bg-orange-400 badge-primary">Halloween</div>
+							{:else if cardId.includes('holo')}
+								<div class="badge badge-info"><Translation id="holographic" /></div>
 							{:else if isCommon}
 								<div class="badge badge-primary"><Translation id="common" /></div>
 							{:else}
@@ -480,7 +486,7 @@
 						</th>
 						<td>{card.ownerSince ? new Date(card.ownerSince).toLocaleString('FR') : ''}</td>
 						<th>
-							{#if card.owner && card.owner.user.profile.discordMember}
+							{#if card.owner && card.owner.user.profile.discordMember && card.owner.user.profile.discordMember.username !== null}
 								<div
 									class="tooltip tooltip-bottom"
 									class:tooltip-success={clipboardCopied}
@@ -502,9 +508,9 @@
 							{/if}
 						</th>
 						<th>
-							{#if card.onSale}
+							<!-- {#if card.onSale}
 								<div class="badge bg-orange-700 font-semibold text-white"><Translation id="sale" /> - {FormatPrice(card.currentOffer.price)} ETH</div>
-							{/if}
+							{/if} -->
 						</th>
 					</tr>
 				{/if}

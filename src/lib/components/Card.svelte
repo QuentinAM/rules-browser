@@ -7,7 +7,7 @@
 	export let pictureUrl: string;
 	export let season: string;
 	export let slug: string;
-	export let cardsMintedCount: string = '';
+	export let cardsMintedCount: string | null;
 	export let cardsOnSaleCount: string = '';
 	export let lowestAsk: string = '';
 	export let averageSale: string = '';
@@ -23,6 +23,8 @@
 			{name}
 			{#if slug.includes("halloween")}
 				<div class="badge text-black bg-orange-400 badge-primary">Halloween</div>
+			{:else if slug.includes('holo')}
+				<div class="badge badge-info"><Translation id="holographic" /></div>
 			{:else if isCommon}
 				<div class="badge badge-primary"><Translation id="common" /></div>
 			{:else}
@@ -37,14 +39,13 @@
 				{:else}
 					<p>{cardsMintedCount}<span class="text-slate-500">/{maxSupply}</span> <Translation id="already_obtained" />!</p>
 				{/if}
-			{:else}
-				<img src={Spinner} class="animate-spin h-8 mt-1" alt="Loading..." />
+				<!-- <img src={Spinner} class="animate-spin h-8 mt-1" alt="Loading..." /> -->
 			{/if}
 
 			<div class="bg-base-200 rounded p-3 mt-2">
 				<h1 class="font-semibold"><Translation id="market" /> <i class="fa-solid fa-money-bill-trend-up"></i></h1>
 				<div><Translation id="on_sale" />: <span class=" font-semibold">{cardsOnSaleCount}</span></div>
-				{#if lowestAsk != null}
+				{#if lowestAsk !== null && lowestAsk !== '' && lowestAsk !== 'NaN'}
 					<div><Translation id="lowest_ask" />: <span class=" font-semibold">{lowestAsk} ETH </span></div>
 				{/if}
 				<div><Translation id="average_sale" />: <span class=" font-semibold">{averageSale} ETH </span></div>

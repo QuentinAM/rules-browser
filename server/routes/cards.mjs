@@ -20,12 +20,11 @@ export default function GetAllCardModels() {
                         pictureUrl(derivative: "width=512"),
                         artistName,
                         season,
-						cardsOnSaleCount,
 						averageSale,
-						cardsMintedCount,
 						scarcity{
 							maxSupply
-						}
+						},
+						listedCardsCount
                     }
                 }`
 			})

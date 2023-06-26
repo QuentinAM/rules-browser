@@ -22,10 +22,6 @@ export default function GetCardById(card, id) {
                             slug
                           }
                         },
-						onSale,
-						currentOffer{
-							price
-						},
                     }
                 }`
 			})

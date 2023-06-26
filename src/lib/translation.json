@@ -33,7 +33,8 @@
 		"market": "Marché",
 		"lowest_ask": "Demande la plus basse",
 		"average_sale": "Prix moyen de vente",
-		"not_to_sale": "Pas disponible à la vente"
+		"not_to_sale": "Pas disponible à la vente",
+		"holographic": "Holographique"
 	},
 	"EN": {
 		"home": "Home",
@@ -69,6 +70,7 @@
 		"market": "Market",
 		"lowest_ask": "Lowest ask",
 		"average_sale": "Average sale",
-		"not_to_sale": "Not on sale"
+		"not_to_sale": "Not on sale",
+		"holographic": "Holographic"
 	}
 }
