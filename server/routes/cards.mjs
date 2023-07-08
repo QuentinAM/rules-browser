@@ -24,7 +24,8 @@ export default function GetAllCardModels() {
 						scarcity{
 							maxSupply
 						},
-						listedCardsCount
+						listedCardsCount,
+						ownedCount
                     }
                 }`
 			})

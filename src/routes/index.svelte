@@ -300,7 +300,7 @@
 					pictureUrl={card.pictureUrl}
 					season={card.season}
 					slug={card.slug}
-					cardsMintedCount={null}
+					cardsMintedCount={card.ownedCount}
 					cardsOnSaleCount={card.listedCardsCount}
 					lowestAsk={FormatPrice(card.lowSerialLowestAsk)}
 					averageSale={FormatSale(card.averageSale)}

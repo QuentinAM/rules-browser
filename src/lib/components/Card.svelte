@@ -34,12 +34,9 @@
 		<div class="lg:text-lg md:text-md text-xs">
 			Saison {season}
 			{#if cardsMintedCount}
-				{#if slug.includes("halloween")}
-					<p>{cardsMintedCount}<span class="text-slate-500">/2175</span> <Translation id="already_obtained" />!</p>
-				{:else}
-					<p>{cardsMintedCount}<span class="text-slate-500">/{maxSupply}</span> <Translation id="already_obtained" />!</p>
-				{/if}
-				<!-- <img src={Spinner} class="animate-spin h-8 mt-1" alt="Loading..." /> -->
+				<p>{cardsMintedCount}<span class="text-slate-500">/{maxSupply}</span> <Translation id="already_obtained" />!</p>
+			{:else}
+				<img src={Spinner} class="animate-spin h-8 mt-1" alt="Loading..." />
 			{/if}
 
 			<div class="bg-base-200 rounded p-3 mt-2">
